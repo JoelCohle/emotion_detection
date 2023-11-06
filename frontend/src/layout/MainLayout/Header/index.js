@@ -32,7 +32,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
                         OCR LOGO HERE
                     </Box> */}
                     
-                    <ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
+                    {/* <ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
                         <Avatar
                             variant="rounded"
                             sx={{
@@ -51,7 +51,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
                         >
                             <IconMenu2 stroke={1.5} size="1.3rem" />
                         </Avatar>
-                    </ButtonBase>
+                    </ButtonBase> */}
                 </Box>
             </Grid>
             <Grid item xs={2} sm={1}>

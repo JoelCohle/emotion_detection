@@ -12,7 +12,7 @@ const Upload = Loadable(lazy(() => import('views/Upload')));
 const Library = Loadable(lazy(() => import('views/Library')));
 
 const isAuthenticated = setToken();
-const CameraPage = Loadable(lazy(() => import('views/pages/camera/Camera')));
+const CameraPage = Loadable(lazy(() => import('views/pages/camera/main')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -22,11 +22,11 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: isAuthenticated ? <DashboardDefault /> : <AuthLogin3 />,
+            element: isAuthenticated ? <Library /> : <AuthLogin3 />,
         },
         {
             path: '/home',
-            element: isAuthenticated ? <DashboardDefault /> : <AuthLogin3 />
+            element: isAuthenticated ? <Library /> : <AuthLogin3 />
         },
         {
             path: '/library',

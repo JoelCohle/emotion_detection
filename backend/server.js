@@ -9,7 +9,7 @@ require('dotenv').config();
 
 // routes
 var UserRouter = require("./routes/user");
-var ImageRouter = require("./routes/image");
+var JobRouter = require("./routes/job");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -27,7 +27,7 @@ connection.once('open', function() {
 // setup API endpoints
 app.use("/user", UserRouter);
 app.use(authorize);
-app.use("/image", ImageRouter);
+app.use("/job", JobRouter);
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);

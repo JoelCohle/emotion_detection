@@ -1,0 +1,35 @@
+.rectangle{
+/* position: absolute; */
+width: 589px;
+height: 226px; 
+display: flex;
+    align-items: center;display: flex;
+    text-align: center;
+    justify-content: center;
+    /* padding-left: 60px; */
+/* /* left: 665px; */
+/* top: 427px;  */
+
+
+background: #FFF8F6;
+border: 1px dashed #CE1414;
+box-sizing: border-box;
+}
+
+.text{
+/* position: absolute;
+left: 41.15%;
+right: 41.2%;
+top: 47.59%;
+bottom: 47.59%; */
+align-items: center;
+
+font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 22px;
+line-height: 10px;
+text-align: center;
+
+color: #CE1414;
+}
