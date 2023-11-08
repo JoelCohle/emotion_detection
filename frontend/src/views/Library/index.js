@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 import {
     Grid, Button, Dialog, DialogContent, DialogActions, DialogTitle, DialogContentText, Typography,
     Checkbox,
@@ -117,6 +118,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Library = () => {
 
+    const navigate = useNavigate();
     const [jobsList, setJobsList] = useState([]);
     const classes = useStyles();
     const [open, setOpen] = useState(false);
@@ -391,6 +393,49 @@ const Library = () => {
         window.location.reload();
     }
 
+    function redirectToRecordPage(file) {
+        // var matchedTasks = []
+        // var check = 0;
+        // for (let i = 0; i < jobsList.findPipelineJobs.length; i++) {
+        //     if (jobsList.findPipelineJobs[i]._id.toString() === file._id.toString()) {
+        //         check = 1;
+        //         break;
+        //     }
+        // }
+
+        // for (let i = 0; i < file.allTasks.length; i++) {
+        //     if (!check && data_astasks.findAssignedTasks.includes(file.allTasks[i]._id.toString())) {
+        //         matchedTasks.push(file.allTasks[i]._id)
+        //     } else if (check) {
+        //         matchedTasks.push(file.allTasks[i]._id)
+        //     }
+        // }
+        
+        console.log(file);
+
+        var jobStruct = {
+            jobID: file._id,
+            JobStatus: file.status,
+            filename: file.name,
+            // taskDetails: file.allTasks,
+            // gender: file.gender,
+            sourceLanguage: file.sourceLanguage,
+            // inputFileURL: file.InputFileURL,
+            // targetLanguage: file.Pipeline.TargetLanguage,
+            // pipelineName: file.Pipeline.Name,
+            // taskTemplates: file.Pipeline.TaskTemplates,
+            // matchedTasks: matchedTasks,
+            toPublish: 0,
+            createdAt: file.createdAt,
+            index: file.index,
+            recordingSrc: file.recordingSrc,
+            scriptSrc: file.scriptSrc,
+            updatedAt: file.updatedAt,
+        };
+        console.log(jobStruct)
+        navigate('/recordpage', { from: "Library", payload: jobStruct })
+    }
+
     //   const images = importAll(require.context('../../../public/userImages', false, /\.(mpe4|mp4|webm)$/));
 
     return (
@@ -474,7 +519,7 @@ const Library = () => {
                                         {filesOnPage.map((file, index) => (
                                             <button className={classes.rowButton}
                                                 key={file._id}
-                                                // onClick={() => redirectToEditorPage(file)}
+                                                onClick={() => redirectToRecordPage(file)}
                                                 style={{ border: "none", background: "none" }} >
                                                 <Grid item container justify="flex-end" style={{ width: "100%", height: "7.52vh", }} >
                                                     <Grid item container

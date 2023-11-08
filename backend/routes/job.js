@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 
@@ -76,6 +77,12 @@ router.post('/delete', (req, res) => {
             console.log('File deleted!');
         })
     }
+});
+
+router.get("/getscript", async function(req, res) {
+    const scriptName = req.query.scriptName;
+    const scriptPath = path.join(__dirname, "../../frontend/public/userScripts/", scriptName);
+    res.sendFile(scriptPath);
 });
 
 router.get("/getjobs", async function(req,res){

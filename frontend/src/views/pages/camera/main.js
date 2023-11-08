@@ -5,7 +5,7 @@ import { Grid, Button } from '@mui/material';
 import { gridSpacing } from 'store/constant';
 import { useState, Component, useRef, useCallback } from 'react';
 
-import SubtitleCreator from './Script'
+// import SubtitleCreator from './Script'
 import WebcamCapture from './Camera'
 
 const options = [
@@ -29,8 +29,8 @@ const customStyles = {
     }),
 };
 
-const RecordVideo = () => {
-    const [currentPage, setCurrentPage] = useState('select');
+const RecordVideo = (props) => {
+    // const [currentPage, setCurrentPage] = useState('select');
 
     const handleOptionChange = (selectedOption) => {
         // setCurrentPage(selectedOption.value);
@@ -42,6 +42,7 @@ const RecordVideo = () => {
             <Grid container justifyContent="center" height="100vh">
                 {/* <Grid item xs={6} md={3}> */}
 
+        {/*
                     {currentPage === 'select' && (
                         <div>
                             <h1>Select Script</h1>
@@ -59,13 +60,10 @@ const RecordVideo = () => {
                             <Button onClick={()=>{setCurrentPage("record")}} variant="contained" color="primary">Record Video</Button>
                         </div>
                     )}
-
-                    {currentPage === 'record' && (
-                        <div>
-                            <WebcamCapture />
-                            <Button onClick={()=>{setCurrentPage("select")}} variant="contained" color="primary">Back</Button>
-                        </div>
-                    )}
+            */}
+                <div>
+                    <WebcamCapture />
+                </div>
                 {/* </Grid> */}
             </Grid>
         </div>

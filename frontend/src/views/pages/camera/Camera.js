@@ -15,7 +15,7 @@ import { gridSpacing } from 'store/constant';
 // ==============================|| Landing/Category Page ||============================== //
 const mimeType = 'video/webm; codecs="opus,vp8"';
 
-const WebcamCapture = () => {
+const WebcamCapture = (props) => {
     const [permission, setPermission] = useState(false);
     const mediaRecorder = useRef(null);
     const liveVideoFeed = useRef(null);
@@ -25,8 +25,21 @@ const WebcamCapture = () => {
     const [recordedVideoBlob, setRecordedVideoBlob] = useState(null);
     const [videoChunks, setVideoChunks] = useState([]);
     const [cameraPermission, setCameraPermission] = useState(false);
+    const [fileContent, setFileContent] = useState('');
 
     const [saveHover, setSaveHover] = useState("");
+
+    useEffect(() => {
+        axios.get('http://localhost:4000/job/getscript', {
+            params: { scriptName: "asdf" }
+        })
+            .then((response) => {
+                setFileContent(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching the file:', error);
+            });
+    }, []);
 
     useEffect(() => {
         const getCameraPermission = async () => {
@@ -434,19 +447,24 @@ const WebcamCapture = () => {
                 </main>
             </Grid> */}
             <Grid item xs={12} align={'center'}>
-                <div className="video-player">
-                    {!recordedVideo ? (
-                        <video ref={liveVideoFeed} autoPlay className="live-player"></video>
-                    ) : null}
-                    {recordedVideo ? (
-                        <div className="recorded-player">
-                            <video className="recorded" src={recordedVideo} controls></video>
-                            {/* <a download href={recordedVideo}>
-							Download Recording
-						</a> */}
+                <div style={{ display: 'flex' }}>
+                    <div style={{ flex: 1, overflowY: 'scroll', padding: '20px' }}>
+                        <pre>{fileContent}</pre>
+                    </div>
+                    <div className="video-player">
+                        {!recordedVideo ? (
+                            <video ref={liveVideoFeed} autoPlay className="live-player"></video>
+                        ) : null}
+                        {recordedVideo ? (
+                            <div className="recorded-player">
+                                <video className="recorded" src={recordedVideo} controls></video>
+                                {/* <a download href={recordedVideo}>
+                                Download Recording
+                            </a> */}
 
-                        </div>
-                    ) : null}
+                            </div>
+                        ) : null}
+                    </div>
                 </div>
             </Grid>
             <Grid item xs={12} align={'center'}>

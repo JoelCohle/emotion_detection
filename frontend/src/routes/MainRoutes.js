@@ -33,6 +33,10 @@ const MainRoutes = {
             element: isAuthenticated ? <Library /> : <AuthLogin3 />
         },
         {
+            path: '/recordpage',
+            element: isAuthenticated ? <CameraPage /> : <AuthLogin3 />
+        },
+        {
             path: '/upload',
             element: isAuthenticated ? <Upload /> : <AuthLogin3 />
         },
