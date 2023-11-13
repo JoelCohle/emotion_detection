@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Select from 'react-select';
 
 import { Grid, Button } from '@mui/material';
 import { gridSpacing } from 'store/constant';
 import { useState, Component, useRef, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // import SubtitleCreator from './Script'
 import WebcamCapture from './Camera'
+import EmotionDetection from './EmotionDetection';
+import PreviewPage from './Preview';
 
 const options = [
     { value: 'script1', label: 'Script 1' },
@@ -30,12 +33,44 @@ const customStyles = {
 };
 
 const RecordVideo = (props) => {
-    // const [currentPage, setCurrentPage] = useState('select');
+    const [currTask, setCurrTask] = useState('RecordVideo');
+    const location = useLocation();
+    const { state } = location;
+
+    useEffect(() => {
+        console.log("In Record Page");
+        console.log(state);
+        // axios.get('http://localhost:4000/job/getscript', {
+        //     params: { scriptName: "asdf" }
+        // })
+        //     .then((response) => {
+        //         setFileContent(response.data);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching the file:', error);
+        //     });
+    }, []);
 
     const handleOptionChange = (selectedOption) => {
         // setCurrentPage(selectedOption.value);
         console.log(`Selected Option: ${selectedOption.value}`);
     };
+
+    function handleClickNext() {
+        switch(currTask) {
+            case "RecordVideo":
+                setCurrTask("EmotionDetection");
+                break;
+            case "EmotionDetection":
+                setCurrTask("Preview");
+                break;
+            case "Preview":
+                setCurrTask("Preview");
+                break;
+            default:
+                setCurrTask("RecordVideo");
+        }
+    }
 
     return (
         <div>
@@ -61,10 +96,38 @@ const RecordVideo = (props) => {
                         </div>
                     )}
             */}
+            {currTask === "RecordVideo" && (
                 <div>
                     <WebcamCapture />
                 </div>
+            )}
+            {currTask === "EmotionDetection" && (
+                <div>
+                    <EmotionDetection />
+                </div>
+            )}
+            {currTask === "Preview" && (
+                <div>
+                    <PreviewPage />
+                </div>
+            )}
                 {/* </Grid> */}
+                <Grid item xs={12} align={'center'}>
+                    <Button
+                        onClick={() => handleClickNext()}
+                        variant="outlined"
+                        color="secondary"
+                        style={{ maxWidth: '200px', maxHeight: '70px', minWidth: '150px', minHeight: '50px' }}
+                    >
+                        {/*<IconDownload size={40} />*/}
+                        { currTask === "Preview" ? (
+                                <span>Finish</span>
+                            ) : (
+                            <span>Next</span>
+                            )
+                        }
+                    </Button>
+                </Grid>
             </Grid>
         </div>
 

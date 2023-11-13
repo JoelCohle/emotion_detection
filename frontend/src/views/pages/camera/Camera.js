@@ -9,7 +9,7 @@ import axios from 'axios';
 // import ImagePicker from 'react-native-image-crop-picker';
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLoaction, useLocation, useNavigate } from 'react-router-dom';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| Landing/Category Page ||============================== //
@@ -26,10 +26,14 @@ const WebcamCapture = (props) => {
     const [videoChunks, setVideoChunks] = useState([]);
     const [cameraPermission, setCameraPermission] = useState(false);
     const [fileContent, setFileContent] = useState('');
+    const location = useLocation();
+    const { state } = location;
 
     const [saveHover, setSaveHover] = useState("");
 
     useEffect(() => {
+        console.log("in camera js");
+        console.log(props);
         axios.get('http://localhost:4000/job/getscript', {
             params: { scriptName: "asdf" }
         })

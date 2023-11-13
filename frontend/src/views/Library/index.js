@@ -433,7 +433,7 @@ const Library = () => {
             updatedAt: file.updatedAt,
         };
         console.log(jobStruct)
-        navigate('/recordpage', { from: "Library", payload: jobStruct })
+        navigate('/recordpage', { state: jobStruct })
     }
 
     //   const images = importAll(require.context('../../../public/userImages', false, /\.(mpe4|mp4|webm)$/));
