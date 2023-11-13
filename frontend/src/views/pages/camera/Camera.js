@@ -4,13 +4,14 @@ import { Grid, Button, Divider, Dialog, DialogTitle, DialogContent } from '@mui/
 import { IconCameraSelfie, IconRepeat, IconDownload, IconCrop, IconChevronsRight, IconArrowRight, IconVideo, IconVideoOff } from '@tabler/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import 'react-image-crop/dist/ReactCrop.css';
-import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from 'react-image-crop'
+import { Tooltip } from '@mui/material';
+// import SimpleBarReact from 'simplebar-react';
 import axios from 'axios';
 // import ImagePicker from 'react-native-image-crop-picker';
 
 import React from 'react';
-import { useLoaction, useLocation, useNavigate } from 'react-router-dom';
-import { gridSpacing } from 'store/constant';
+import { useParams, useNavigate, useHistory } from 'react-router-dom';
+import "./Script.css"
 
 // ==============================|| Landing/Category Page ||============================== //
 const mimeType = 'video/webm; codecs="opus,vp8"';
@@ -26,19 +27,24 @@ const WebcamCapture = (props) => {
     const [videoChunks, setVideoChunks] = useState([]);
     const [cameraPermission, setCameraPermission] = useState(false);
     const [fileContent, setFileContent] = useState('');
-    const location = useLocation();
-    const { state } = location;
-
     const [saveHover, setSaveHover] = useState("");
+    const [job, setJob] = useState(null);
+    const parentCallback = props.parentCallback;
+
+    const { id } = useParams();
 
     useEffect(() => {
-        console.log("in camera js");
-        console.log(props);
+        const jobDetails = JSON.parse(localStorage.getItem("jobStruct"));
+        // console.log(jobDetails)
+        setJob(jobDetails);
         axios.get('http://localhost:4000/job/getscript', {
-            params: { scriptName: "asdf" }
+            params: { scriptName: jobDetails.name }
         })
             .then((response) => {
-                setFileContent(response.data);
+                let script = response.data
+                // script = script.split('\n');
+                // console.log(script)
+                setFileContent(script);
             })
             .catch((error) => {
                 console.error('Error fetching the file:', error);
@@ -133,13 +139,9 @@ const WebcamCapture = (props) => {
 
     const startRecording = async () => {
         setRecordingStatus("recording");
-
         const media = new MediaRecorder(stream, { mimeType });
-
         mediaRecorder.current = media;
-
         mediaRecorder.current.start();
-
         let localVideoChunks = [];
 
         mediaRecorder.current.ondataavailable = (event) => {
@@ -147,7 +149,6 @@ const WebcamCapture = (props) => {
             if (event.data.size === 0) return;
             localVideoChunks.push(event.data);
         };
-
         setVideoChunks(localVideoChunks);
     };
 
@@ -167,55 +168,61 @@ const WebcamCapture = (props) => {
     };
 
     function dataURLtoFile(dataurl, filename) {
-        // var arr = dataurl.split(','),
-        // 	mime = arr[0].match(/:(.*?);/)[1],
-        // 	bstr = atob(arr[1]),
-        // 	n = bstr.length,
-        // 	u8arr = new Uint8Array(n);
-
-        // while (n--) {
-        // 	u8arr[n] = bstr.charCodeAt(n);
-        // }
         const file = new File([recordedVideoBlob], filename, { type: recordedVideoBlob.type });
         return file
     }
 
     const uploadvideo = (src) => {
-        console.log(src)
-        const name = "Capture" + Date.now() + ".webm";
+        
+        console.log("Upload")
+        // strip job.name and remove the file extension
+        var name = job.name.split("/").pop().replace(".txt", ".webm")
         var file = dataURLtoFile(src, name);
         const uploadData = new FormData();
-        uploadData.append('image', file);
+        uploadData.append('recording', file);
         uploadData.append('name', name);
-        uploadData.append('email', localStorage.getItem('email'));
-        uploadData.append('category', localStorage.getItem('category'));
+        uploadData.append('email', job.email);
+        uploadData.append('_id', job._id);
+        uploadData.append('status', "Recorded");
+        console.log(uploadData)
 
-        axios.post('http://localhost:4000/image/add', uploadData)
-            .then(res => {
-                console.log(res);
-                // console.log("pog?");
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        // axios.post('http://localhost:4000/job/update', uploadData, {
+        //     headers : {
+        //         'Content-Type': 'multipart/form-data'
+        //     }
+        // })
+        //     .then(res => {
+        //         console.log("Uploaded");
+        //         console.log(res);
+        //         var jobStruct = {
+        //             _id: job._id,
+        //             status: "Recorded",
+        //             name: job.name,
+        //             sourceLanguage: job.sourceLanguage,
+        //             createdAt: job.createdAt,
+        //             index: job.index,
+        //             recordingSrc: "../frontend/public/userRecordings/" + name,
+        //             scriptSrc: job.scriptSrc,
+        //             updatedAt: job.updatedAt,
+        //         };
+        //         localStorage.setItem("jobStruct", JSON.stringify(jobStruct));
+        //         // window.location.reload();    
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     });
     }
 
     return (
-        <Grid item container xs={12} xl={12} sm={12} md={12} justify="space-between" style={{ paddingTop: "1vw", width: "80vw", height: "55.93vh", }} >
-            <Grid item xs={12} align={'center'}>
-                <h1>Video Recorder</h1>
-            </Grid>
-
+        // <Grid item xs={12} align={'center'}>
+        //         <h1>Video Recorder</h1>
+        //     </Grid>
+        <Grid item container xs={12} xl={12} sm={12} md={12} style={{ marginTop: "2vh", width: "94vw", height: "80vh", background: "#F8F8F8", boxShadow: "4px 4px 25px 0px rgba(174, 173, 173, 0.25), -4px -4px 25px -4px rgba(174, 173, 173, 0.25)" }}  >
+            {/* Header bar container */}
             {/* START RECORDING */}
             {permission && recordingStatus === "inactive" ? (
                 <Grid item container justifyContent="space-between" alignContent="center"
-                    style={{
-                        height: "10%",
-                        width: "80vw",
-                        background: "#0D558F",
-                        position: "relative",
-                    }}
-                >
+                    style={{ height: "10%", width: "94vw", background: "#0D558F", position: "relative", }} >
                     {/* <Grid item container justifyContent="flex-start" alignItems="center" spacing={2}> */}
                     <Grid item>
                         <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
@@ -275,13 +282,7 @@ const WebcamCapture = (props) => {
             {/* STOP RECORDING */}
             {recordingStatus === "recording" ? (
                 <Grid item container justifyContent="space-between" alignContent="center"
-                    style={{
-                        height: "10%",
-                        width: "80vw",
-                        background: "#0D558F",
-                        position: "relative",
-                    }}
-                >
+                    style={{ height: "10%", width: "94vw", background: "#0D558F", position: "relative", }} >
                     {/* <Grid item container justifyContent="flex-start" alignItems="center" spacing={2}> */}
                     <Grid item>
                         <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
@@ -341,13 +342,7 @@ const WebcamCapture = (props) => {
             {/* RETAKE VIDEO */}
             {recordedVideo ? (
                 <Grid item container justifyContent="space-between" alignContent="center"
-                    style={{
-                        height: "10%",
-                        width: "80vw",
-                        background: "#0D558F",
-                        position: "relative",
-                    }}
-                >
+                    style={{ height: "10%", width: "94vw", background: "#0D558F", position: "relative", }} >
                     {/* <Grid item container justifyContent="flex-start" alignItems="center" spacing={2}> */}
                     <Grid item>
                         <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
@@ -380,7 +375,7 @@ const WebcamCapture = (props) => {
                         </button>
                     </Grid>
                     <Grid item>
-                        <button style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", paddingRight: "0.45vw", position: "relative", zIndex: 2,  pointerEvents: "none", paddingTop: "0.5vh" }} >
+                        <button style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", paddingRight: "0.45vw", position: "relative", zIndex: 2, pointerEvents: "none", paddingTop: "0.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Stop.jpg"
@@ -403,87 +398,74 @@ const WebcamCapture = (props) => {
                     {/* </Grid> */}
                 </Grid>
             ) : null}
-
-
-            {/* <Grid item xs={12} align={'center'}>
-                <main>
-                    <div className="video-controls">
-                        {permission && recordingStatus === "inactive" ? (
-                            <Grid item xs={3} align={"center"} spacing={2}>
-                                <Button
-                                    onClick={startRecording}
-                                    variant="outlined"
-                                    color="secondary"
-                                    style={{ maxWidth: '200px', maxHeight: '70px', minWidth: '150px', minHeight: '50px' }}
-                                >
-                                    <IconVideo size={40} />
-                                    <span style={{ marginLeft: '20px' }}>START RECORDING</span>
-                                </Button>
-                            </Grid>
+            <Grid item container direction="column" alignItems="flex-start" style={{ width: "50%", height: "78%", marginTop: "1vw", marginLeft: "2vw" }} >
+                <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "18px", fontWeight: 500 }}>Instructional Message Placeholder</span>
+                <Grid item container style={{ width: '100%', height: '90%', overflow: 'auto', border: '2px solid #b3b3b3', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', }} >
+                    {/* <SimpleBarReact forceVisible="y" autoHide={false} style={{ maxHeight: '100%', width: '99.5%' }}>
+                        {fileContent ? (
+                            <>
+                                <div>
+                                    {fileContent.map((line, index) => (
+                                        <div key={index}>
+                                            <pre>{line}</pre>
+                                        </div>
+                                    ))}
+                                    </div>
+                            </>
                         ) : null}
-                        {recordedVideo ? (
-                            <Grid item xs={3} align={"center"} spacing={2}>
-                                <Button
-                                    onClick={getCameraPermission}
-                                    variant="outlined"
-                                    color="secondary"
-                                    style={{ maxWidth: '200px', maxHeight: '70px', minWidth: '150px', minHeight: '50px' }}
-                                >
-                                    <IconVideo size={40} />
-                                    <span style={{ marginLeft: '20px' }}>RETAKE VIDEO</span>
-                                </Button>
-                            </Grid>
-                        ) : null}
-                        {recordingStatus === "recording" ? (
-                            <Grid item xs={3} align={"center"} spacing={2}>
-                                <Button
-                                    onClick={stopRecording}
-                                    variant="outlined"
-                                    color="secondary"
-                                    style={{ maxWidth: '200px', maxHeight: '70px', minWidth: '150px', minHeight: '50px' }}
-                                >
-                                    <IconVideoOff size={40} />
-                                    <span style={{ marginLeft: '20px' }}>STOP RECORDING</span>
-                                </Button>
-                            </Grid>
-                        ) : null}
+                    </SimpleBarReact> */}
+                    <div style={{ width: '100%', height: '100%', }}>
+                        <textarea
+                            value={fileContent}
+                            style={{ fontSize: '16px', padding: '20px', fontFamily: "Montserrat", width: '100%', height: '100%', border: 'none', resize: 'none', overflowY: 'auto' }}
+                        />
                     </div>
-                </main>
-            </Grid> */}
-            <Grid item xs={12} align={'center'}>
-                <div style={{ display: 'flex' }}>
-                    <div style={{ flex: 1, overflowY: 'scroll', padding: '20px' }}>
-                        <pre>{fileContent}</pre>
-                    </div>
-                    <div className="video-player">
-                        {!recordedVideo ? (
-                            <video ref={liveVideoFeed} autoPlay className="live-player"></video>
-                        ) : null}
-                        {recordedVideo ? (
-                            <div className="recorded-player">
-                                <video className="recorded" src={recordedVideo} controls></video>
-                                {/* <a download href={recordedVideo}>
-                                Download Recording
-                            </a> */}
-
-                            </div>
-                        ) : null}
-                    </div>
-                </div>
+                </Grid>
             </Grid>
-            <Grid item xs={12} align={'center'}>
-                {recordedVideo ? (
+            <Grid item container justifyContent="center" style={{ width: "45%", height: "70%", marginTop: "1vw", }} >
+                <Grid item container direction="column" justifyContent="space-between" style={{ width: "36vw", height: "90%", }} >
+                    <Tooltip title="RECORDER" style={{ fontFamily: "Montserrat" }}>
+                        <Grid item container direction="column" alignItems="left">
+                            <Grid item style={{ paddingBottom: "10px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "inline-block", maxWidth: "20em", fontSize: "18px", fontWeight: "600", color: "#7b7b7b", }} >
+                                <span style={{ fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "20px", fontWeight: 500 }}><b>Camera Recording</b> <img src='images/record2.svg'></img></span>
+                            </Grid>
+                            <Grid item>
+                                <div style={{ display: 'flex' }}>
+
+                                    <div className="video-player">
+                                        {!recordedVideo ? (
+                                            <video ref={liveVideoFeed} autoPlay className="live-player"></video>
+                                        ) : null}
+                                        {recordedVideo ? (
+                                            <div className="recorded-player">
+                                                <video className="live-player" src={recordedVideo} controls></video>
+                                                {/* <a download href={recordedVideo}> Download Recording </a> */}
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Tooltip>
+                </Grid>
+            </Grid>
+            <Grid item container justifyContent="center" style={{height:"5%"}}>
+            {/* <Grid item xs={12} align={'center'}> */}
                     <Button
-                        onClick={() => uploadvideo(recordedVideo)}
-                        variant="outlined"
-                        color="secondary"
-                        style={{ maxWidth: '200px', maxHeight: '70px', minWidth: '150px', minHeight: '50px' }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            uploadvideo(recordedVideo);
+                        }}
+                        type="button"
+                        disableRipple={true}
+                        disabled={!recordedVideo}
+                        style={{ backgroundColor: recordedVideo ? '#0e66ac':'#C0C0C0', borderRadius: '4px', padding: "15px", color: "white", fontSize: "14px", paddingLeft:"5%", paddingRight:"5%"}}
                     >
-                        <IconDownload size={40} />
-                        <span style={{ marginLeft: '20px' }}>SAVE VIDEO</span>
+                        <span>NEXT</span>
                     </Button>
-                ) : null}
+            {/* </Grid> */}
             </Grid>
+            <Grid item container justifyContent="center" style={{height:"5%"}}></Grid>
         </Grid>
     );
 };

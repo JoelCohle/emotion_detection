@@ -119,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
 const Library = () => {
 
     const navigate = useNavigate();
+    // const history = useHistory();
     const [jobsList, setJobsList] = useState([]);
     const classes = useStyles();
     const [open, setOpen] = useState(false);
@@ -145,75 +146,12 @@ const Library = () => {
             date: "26-07-2021, 12:00:00 PM",
             status: "In Progress (MT)",
         },
-        {
-            _id: 3,
-            name: "file3_kqjwenkqweibqweqiwbe.mp4",
-            length: "10 Min",
-            sourceLanguage: "English-US",
-            date: "26-07-2021, 12:00:00 PM",
-            status: "Published",
-        },
-        {
-            _id: 4,
-            name: "file4_kqjwenkqweibqweqiwbe.mp4",
-            length: "10 Min",
-            sourceLanguage: "English-US",
-            date: "26-07-2021, 12:00:00 PM",
-            status: "Completed",
-        },
-        {
-            _id: 5,
-            name: "file5_kqjwenkqweibqweqiwbe.mp4",
-            length: "10 Min",
-            sourceLanguage: "English-US",
-            date: "26-07-2021, 12:00:00 PM",
-            status: "Convert",
-        },
-        {
-            _id: 6,
-            name: "file6_kqjwenkqweibqweqiwbe.mp4",
-            length: "10 Min",
-            sourceLanguage: "English-US",
-            date: "26-07-2021, 12:00:00 PM",
-            status: "In Progress (ASR)",
-        },
-        {
-            _id: 7,
-            name: "file7_kqjwenkqweibqweqiwbe.mp4",
-            length: "10 Min",
-            sourceLanguage: "English-US",
-            date: "26-07-2021, 12:00:00 PM",
-            status: "In Progress (MT)",
-        },
-        {
-            _id: 8,
-            name: "file8_kqjwenkqweibqweqiwbe.mp4",
-            length: "10 Min",
-            sourceLanguage: "English-US",
-            date: "26-07-2021, 12:00:00 PM",
-            status: "In Progress (MT)",
-        },
-        {
-            _id: 9,
-            name: "file9_kqjwenkqweibqweqiwbe.mp4",
-            length: "10 Min",
-            sourceLanguage: "English-US",
-            date: "26-07-2021, 12:00:00 PM",
-            status: "In Progress (MT)",
-        },
-        {
-            _id: 10,
-            name: "file10_kqjwenkqweibqweqiwbe.mp4",
-            length: "10 Min",
-            sourceLanguage: "English-US",
-            date: "26-07-2021, 12:00:00 PM",
-            status: "In Progress (MT)",
-        },
     ];
     let numberOfPages = jobsList && jobsList.length > 0 ? Math.ceil(jobsList.length / filesPerPage) : 1;
 
     // useEffect that automatically loads all images of the specific user
     useEffect(() => {
+        console.log(localStorage.getItem("email"))
         axios.get("http://localhost:4000/job/getjobs", {
             params: { email: localStorage.getItem("email") }
         })
@@ -276,17 +214,6 @@ const Library = () => {
         console.log(jobsChecked)
     }
 
-    // function doesFileExist(urlToFile) {
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.open('HEAD', urlToFile, false);
-    //     xhr.send();
-
-    //     if (xhr.status == "404") {
-    //         return false;
-    //     } else {
-    //         return true;
-    //     }
-    // }
 
     // function handleDownload(image) {
     //     var a = document.createElement("a");
@@ -314,48 +241,6 @@ const Library = () => {
     //         .catch(err => {
     //             console.log(err);
     //         })
-    // }
-
-    // async function importAll(imageList) {
-
-    //     let email = localStorage.getItem('email');
-    //     let final = [];
-    //     let images = {};
-
-    //     imageList.keys().map((item, index) => { images[item.replace('./', '')] = imageList(item); });
-
-    //     for (const imageName in images) {
-    //         let category = "";
-
-    //         // get category based on name and email
-    //         await axios.get("http://localhost:4000/image/getcategory", {
-    //             params: { name: imageName, email: email }
-    //         })
-    //             .then(res => {
-    //                 if (res.data[0] != undefined) {
-    //                     category = res.data[0].category;
-    //                 }
-    //             })
-    //             .catch(err => console.log(err));
-
-    //         if (category.localeCompare("") != 0) {
-
-    //             var status = "Partially Extracted";
-    //             var path = "./result/" + imageName.split('.').slice(0, -1).join('.') + '.xlsx';
-    //             var fileCheck = doesFileExist(path) ? status = "Extracted" : status = "Partially Extracted";
-
-    //             final.push({
-    //                 name: imageName,
-    //                 email: email,
-    //                 category: category,
-    //                 status: status
-    //             });
-    //         }
-    //     }
-
-    //     setJobsList(final);
-
-    //     return final;
     // }
 
     function deleteJobs() {
@@ -414,18 +299,10 @@ const Library = () => {
         console.log(file);
 
         var jobStruct = {
-            jobID: file._id,
-            JobStatus: file.status,
-            filename: file.name,
-            // taskDetails: file.allTasks,
-            // gender: file.gender,
+            _id: file._id,
+            status: file.status,
+            name: file.name,
             sourceLanguage: file.sourceLanguage,
-            // inputFileURL: file.InputFileURL,
-            // targetLanguage: file.Pipeline.TargetLanguage,
-            // pipelineName: file.Pipeline.Name,
-            // taskTemplates: file.Pipeline.TaskTemplates,
-            // matchedTasks: matchedTasks,
-            toPublish: 0,
             createdAt: file.createdAt,
             index: file.index,
             recordingSrc: file.recordingSrc,
@@ -433,7 +310,13 @@ const Library = () => {
             updatedAt: file.updatedAt,
         };
         console.log(jobStruct)
-        navigate('/recordpage', { state: jobStruct })
+        // store jobstruct in localstorage and replace it if it already exists
+        let storedData = JSON.parse(localStorage.getItem("jobStruct"));
+        if (storedData !== null) {
+            localStorage.removeItem("jobStruct");
+        }
+        localStorage.setItem("jobStruct", JSON.stringify(jobStruct));
+        navigate(`/recordpage`);
     }
 
     //   const images = importAll(require.context('../../../public/userImages', false, /\.(mpe4|mp4|webm)$/));

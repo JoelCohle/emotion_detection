@@ -12,19 +12,19 @@ const userJobs = require('../models/jobs');
 
 // Routing Uploaded images to frontend/public/userJobs
 const videoStorage = multer.diskStorage({
-    destination: function(req, file, callback) {
+    destination: function (req, file, callback) {
         callback(null, '../frontend/public/userRecordings/');
     },
-    filename: function(req, file, callback) {
+    filename: function (req, file, callback) {
         callback(null, file.originalname);
     }
 });
 
 const scriptStorage = multer.diskStorage({
-    destination: function(req, file, callback) {
+    destination: function (req, file, callback) {
         callback(null, '../frontend/public/userScripts/');
     },
-    filename: function(req, file, callback) {
+    filename: function (req, file, callback) {
         callback(null, file.originalname);
     }
 });
@@ -38,7 +38,7 @@ const videoupload = multer({
     storage: videoStorage
 });
 
-// Add new recording to database
+// Add new job to database
 router.post('/add', scriptupload.single('job'), (req, res) => {
     const newJob = new userJobs({
         scriptSrc: "../frontend/public/userScripts/" + req.body.name,
@@ -53,6 +53,53 @@ router.post('/add', scriptupload.single('job'), (req, res) => {
         .then(job => res.json("Job added!"))
         .catch(err => console.log(err));
 });
+
+// update recordingSrc to existing job and save to file location
+router.post('/update', videoupload.single('recording'), (req, res) => {
+    // userJobs.findOneAndUpdate({
+    //     _id: req.body._id,
+    //     email: req.body.email
+    // }, {
+    //     recordingSrc: "../frontend/public/userRecordings/" + req.body.name,
+    //     status: req.body.status
+    // })
+    //     .then(
+    //         //console.log(req.file),
+    //         res.json("Job updated!")
+    //     )
+    //     .catch(err => console.log(err));
+    // userJobs.findById(req.body._id)
+    //     .then(job => {
+    //         if (!job) {
+    //             return res.status(404).json({ error: 'Job not found' });
+    //         }
+
+    //         // Update job details
+    //         job.recordingSrc = "../frontend/public/userRecordings/" + req.body.name,
+    //         job.status = req.body.status;
+
+    //         // Save the updated job
+    //         job.save()
+    //             .then(updatedJob => res.json(updatedJob))
+    //             .catch(err => res.status(500).json({ error: 'Failed to update job', details: err }));
+    //     })
+    //     .catch(err => res.status(500).json({ error: 'Failed to find job', details: err }));
+    console.log(req.body);
+    userJobs.updateOne({_id: req.body._id}, {
+        $set : {
+            recordingSrc: "../frontend/public/userRecordings/" + req.body.name,
+            status: req.body.status
+        }
+    })
+        .then(updatedJob => {
+            console.log(updatedJob);
+            res.status(200).json(updatedJob);
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Failed to update job', details: err })
+        })
+});
+
 
 router.post('/delete', (req, res) => {
     const file1 = req.body.recordingSrc;
@@ -71,7 +118,7 @@ router.post('/delete', (req, res) => {
         )
         .catch(err => console.log(err));
 
-    if(file1 && success){
+    if (file1 && success) {
         fs.unlinkSync(file1, (err) => {
             if (err) throw err;
             console.log('File deleted!');
@@ -79,16 +126,25 @@ router.post('/delete', (req, res) => {
     }
 });
 
-router.get("/getscript", async function(req, res) {
+router.get("/getscript", async function (req, res) {
     const scriptName = req.query.scriptName;
     const scriptPath = path.join(__dirname, "../../frontend/public/userScripts/", scriptName);
     res.sendFile(scriptPath);
 });
 
-router.get("/getjobs", async function(req,res){
+router.get("/getjobs", async function (req, res) {
     const email = req.query.email;
-    const jobs = await userJobs.find({email: email});
+    const jobs = await userJobs.find({ email: email });
     res.json(jobs);
+});
+
+// Get category based on name and email
+router.get('/getjobdetails', (req, res) => {
+    userJobs.find({
+        _id: req.query._id,
+    })
+        .then(job => res.json(job))
+        .catch(err => console.log(err));
 });
 
 // // Get category based on name and email
