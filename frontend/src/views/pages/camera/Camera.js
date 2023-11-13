@@ -5,7 +5,7 @@ import { IconCameraSelfie, IconRepeat, IconDownload, IconCrop, IconChevronsRight
 import { Scrollbars } from 'react-custom-scrollbars';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Tooltip } from '@mui/material';
-import SimpleBarReact from 'simplebar-react';
+// import SimpleBarReact from 'simplebar-react';
 import axios from 'axios';
 // import ImagePicker from 'react-native-image-crop-picker';
 

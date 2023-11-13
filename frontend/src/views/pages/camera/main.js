@@ -6,6 +6,8 @@ import axios from 'axios';
 
 // import SubtitleCreator from './Script'
 import WebcamCapture from './Camera'
+import EmotionDetection from './EmotionDetection';
+import PreviewPage from './Preview';
 
 const customStyles = {
     control: (provided, state) => ({
@@ -51,6 +53,7 @@ const RecordVideo = (props) => {
             });
     }, []);
 
+
     return (
         <div>
             <Grid container justifyContent="center" height="80vh">
@@ -64,11 +67,15 @@ const RecordVideo = (props) => {
 
                 {jobStatus === 'Recorded' && (
                     <div>
-                        <h1>ASR Page here</h1>
+                        <EmotionDetection />
+                    </div>
+                )}
+                {jobStatus === 'EmotionDetected' && (
+                    <div>
+                    {/*<PreviewPage />*/}
                     </div>
                 )}
 
-                {/* </Grid> */}
             </Grid>
         </div>
 
