@@ -33,18 +33,19 @@ const RecordVideo = (props) => {
     useEffect(() => {
         const jobDetails = JSON.parse(localStorage.getItem("jobStruct"));
         console.log(jobDetails)
+        console.log("IM HEEERREEEEEE")
         axios.get("http://localhost:4000/job/getjobdetails", {
             params: { _id: jobDetails._id }
         })
             .then(res => {
                 console.log(res.data);
-                setCurrJob(jobDetails);
-                setJobStatus(jobDetails.status);
+                setCurrJob(res.data);
+                setJobStatus(res.data.status);
                 let storedData = JSON.parse(localStorage.getItem("jobStruct"));
                 if (storedData !== null) {
                     localStorage.removeItem("jobStruct");
                 }
-                localStorage.setItem("jobStruct", JSON.stringify(jobDetails));
+                localStorage.setItem("jobStruct", JSON.stringify(res.data));
             }
             )
             .catch(err => {
@@ -72,7 +73,7 @@ const RecordVideo = (props) => {
                 )}
                 {jobStatus === 'EmotionDetected' && (
                     <div>
-                    {/*<PreviewPage />*/}
+                        <PreviewPage />
                     </div>
                 )}
 
