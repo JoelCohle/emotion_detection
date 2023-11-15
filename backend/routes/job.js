@@ -56,37 +56,10 @@ router.post('/add', scriptupload.single('job'), (req, res) => {
 
 // update recordingSrc to existing job and save to file location
 router.post('/update', videoupload.single('recording'), (req, res) => {
-    // userJobs.findOneAndUpdate({
-    //     _id: req.body._id,
-    //     email: req.body.email
-    // }, {
-    //     recordingSrc: "../frontend/public/userRecordings/" + req.body.name,
-    //     status: req.body.status
-    // })
-    //     .then(
-    //         //console.log(req.file),
-    //         res.json("Job updated!")
-    //     )
-    //     .catch(err => console.log(err));
-    // userJobs.findById(req.body._id)
-    //     .then(job => {
-    //         if (!job) {
-    //             return res.status(404).json({ error: 'Job not found' });
-    //         }
 
-    //         // Update job details
-    //         job.recordingSrc = "../frontend/public/userRecordings/" + req.body.name,
-    //         job.status = req.body.status;
-
-    //         // Save the updated job
-    //         job.save()
-    //             .then(updatedJob => res.json(updatedJob))
-    //             .catch(err => res.status(500).json({ error: 'Failed to update job', details: err }));
-    //     })
-    //     .catch(err => res.status(500).json({ error: 'Failed to find job', details: err }));
     console.log(req.body);
-    userJobs.updateOne({_id: req.body._id}, {
-        $set : {
+    userJobs.updateOne({ _id: req.body._id }, {
+        $set: {
             recordingSrc: "../frontend/public/userRecordings/" + req.body.name,
             status: req.body.status
         }
@@ -138,14 +111,29 @@ router.get("/getjobs", async function (req, res) {
     res.json(jobs);
 });
 
-// Get category based on name and email
 router.get('/getjobdetails', (req, res) => {
-    userJobs.find({
+    userJobs.findOne({
         _id: req.query._id,
     })
         .then(job => res.json(job))
         .catch(err => console.log(err));
 });
+
+// get video recording file based on _id
+router.get("/getrecording", async function (req, res) {
+    const recordingName = req.query.recordingName;
+    const recordingPath = path.join(__dirname, "../../frontend/public/userRecordings/", recordingName);
+    console.log(recordingPath)
+    res.sendFile(recordingPath);
+    // if (fs.existsSync(recordingPath)) {
+    //     // Stream the video file
+    //     const fileStream = fs.createReadStream(recordingPath);
+    //     fileStream.pipe(res);
+    // } else {
+    //     res.status(404).send('Video not found');
+    // }
+});
+
 
 // // Get category based on name and email
 // router.get('/getcategory', (req, res) => {

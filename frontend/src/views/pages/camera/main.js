@@ -28,30 +28,29 @@ const customStyles = {
 const RecordVideo = (props) => {
     const [currentPage, setCurrentPage] = useState('');
     const [currJob, setCurrJob] = useState(null);
-    const [jobStatus, setJobStatus] = useState("");
+    const [jobStatus, setJobStatus] = useState("Analysis");
 
     useEffect(() => {
         const jobDetails = JSON.parse(localStorage.getItem("jobStruct"));
         console.log(jobDetails)
-        console.log("IM HEEERREEEEEE")
-        axios.get("http://localhost:4000/job/getjobdetails", {
-            params: { _id: jobDetails._id }
-        })
-            .then(res => {
-                console.log(res.data);
-                setCurrJob(res.data);
-                setJobStatus(res.data.status);
-                let storedData = JSON.parse(localStorage.getItem("jobStruct"));
-                if (storedData !== null) {
-                    localStorage.removeItem("jobStruct");
-                }
-                localStorage.setItem("jobStruct", JSON.stringify(res.data));
-            }
-            )
-            .catch(err => {
-                console.log(err);
-                console.log("Failure in response")
-            });
+        // axios.get("http://localhost:4000/job/getjobdetails", {
+        //     params: { _id: jobDetails._id }
+        // })
+        //     .then(res => {
+        //         console.log(res.data);
+        //         setCurrJob(res.data);
+        //         setJobStatus(res.data.status);
+        //         let storedData = JSON.parse(localStorage.getItem("jobStruct"));
+        //         if (storedData !== null) {
+        //             localStorage.removeItem("jobStruct");
+        //         }
+        //         localStorage.setItem("jobStruct", JSON.stringify(res.data));
+        //     }
+        //     )
+        //     .catch(err => {
+        //         console.log(err);
+        //         console.log("Failure in response")
+        //     });
     }, []);
 
 
@@ -71,7 +70,7 @@ const RecordVideo = (props) => {
                         <EmotionDetection />
                     </div>
                 )}
-                {jobStatus === 'EmotionDetected' && (
+                {jobStatus === 'Analysis' && (
                     <div>
                         <PreviewPage />
                     </div>
