@@ -138,8 +138,8 @@ const RecordVideo = (props) => {
 
                 {jobStatus === 'Recorded' && currJob.SRT && (
                     <div>
-                        {/* <EmotionDetection /> */}
-                        <TestPage />
+                        <EmotionDetection />
+                        {/* <TestPage /> */}
                     </div>
                 )}
 

@@ -4,20 +4,9 @@ import { Button } from "@mui/material";
 import Tooltip from "@material-ui/core/Tooltip";
 import ReactPlayer from 'react-player';
 import axios from 'axios';
-import { AssemblyAI } from 'assemblyai';
 
 import SRTViewer from './SRTViewer';
 import { parse } from "dotenv";
-
-const ASRclient = new AssemblyAI({
-  apiKey: 'e69ed6d728484972b680c1c2fd76ddc3',
-});
-
-let srt = `
-1
-00:00:11,544 --> 00:00:12,682
-Hello
-`;
 
 const sampleSRT = `
 1
@@ -134,60 +123,39 @@ const EmotionDetection = (props) => {
     const [recordingSrc, setRecordingSrc] = useState(null);
     const [scriptSrc, setScriptSrc] = useState(null);
     const [job, setJob] = useState(null);
-    const [subtitles, setSubtitles] = useState(null);
+    const [srt, setSrt] = useState(null);
     const [parsedSubtitles, setParsedSubtitles] = useState(null);
 
     useEffect(() => {
-        setParsedSubtitles(parseSrt(sampleSRT));
-        console.log(parsedSubtitles);
-    }, []);
-
-    // const getSubtitles = async (videoName) => {
-    //     try {
-    //         const response = await axios.post('http://localhost:4000/job/getSubtitles', {
-    //             videoName: videoName,
-    //         });
-
-    //         setSubtitles(response.data);
-    //         console.log(response.data); // Display subtitles or save them in the state
-    //         let storedSubtitles = JSON.parse(localStorage.getItem("subtitles"));
-    //         if (storedSubtitles !== null) {
-    //             localStorage.removeItem("subtitles");
-    //         }
-    //         localStorage.setItem("subtitles", subtitles);
-    //     } catch (error) {
-    //         console.error('Error getting subtitles:', error.message);
-    //     }
-    //     console.log("here");
-    //     setSubtitles("asdfasdfasdf");
-    //     localStorage.setItem("subtitles", subtitles);
-    // };
-
-    // const getSubtitles = async (data) => {
-    //     const transcript = await ASRclient.transcripts.create(data);
-    //     console.log(transcript.text);
-    // };
+        if(srt){
+            setParsedSubtitles(parseSrt(srt));
+            console.log(parsedSubtitles);
+        }
+    }, [srt]);
 
     useEffect(() => {
-        // console.log("printing localStorage from EmotionDetection");
-        // console.log(JSON.parse(localStorage.getItem("jobStruct")));
+        const jobDetails = JSON.parse(localStorage.getItem("jobStruct"));
+        console.log(jobDetails)
+        setJob(jobDetails)
+        var filename = jobDetails.name.split("/").pop().replace(".txt", ".srt")
+        axios.get('http://localhost:4000/job/getSRT', {
+            params: { name: filename}
+        })
+            .then((response) => {
+                setSrt(response.data);
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching the SRT:', error);
+            });
+    }, []);
+
+    useEffect(() => {
         const jobDetails = JSON.parse(localStorage.getItem("jobStruct"));
         console.log(jobDetails);
         setJob(jobDetails);
-        // setJob((prevJob) => {
-        //     console.log(prevJob); // This might still print null if setJob hasn't executed yet
-        //     return jobDetails; // Update the state with jobDetails
-        // });
-        console.log(job);
-        setRecordingSrc(jobDetails.recordingSrc);
-        setScriptSrc(jobDetails.scriptSrc);
-        // var name = jobDetails.name.split("/").pop().replace(".txt", ".webm")
-        // const data = {
-        //     audio_url: '/home/gokul/Videos/temp.mp4'
-        // };
-        // console.log(data);
-        // getSubtitles(data);
-        // console.log(subtitles);
+        var filepath = "userRecordings/" + jobDetails.name.split("/").pop().replace(".txt", ".webm")
+        setRecordingSrc(filepath);
     }, []);
 
     // useEffect(() => {
@@ -199,170 +167,169 @@ const EmotionDetection = (props) => {
 
     const [mobileDisplay, setMobileDisplay] = useState(false);
 
-    const gotoPreviewPage = () => {
-        const storedJobStruct = localStorage.getItem("jobStruct");
-        if (storedJobStruct) {
-            var jobStruct = JSON.parse(storedJobStruct);
-            jobStruct.status = "EmotionDetected";
-            // console.log("from gotoPreviewPage: ", jobStruct);
-            localStorage.setItem("jobStruct", JSON.stringify(jobStruct));
-            // console.log(parsedSubtitles);
-            localStorage.setItem("parsedSubtitles", JSON.stringify(parsedSubtitles));
-            window.location.reload();
-            // console.log(JSON.parse(localStorage.getItem("parsedSubtitles")));
-        }
-        else {
-            console.log("jobStruct not found in localStorage");
-        }
+    const gotoPreviewPage = async () => {
+        // const uploadData = new FormData();
+        // uploadData.append('_id', job._id);
+        // uploadData.append('status', "Analysis");
+        const jobData = { '_id':  job._id, 'status': "Analysis"}
+        await axios.post('http://localhost:4000/job/updateStatus', jobData)
+            .then(result => {
+                console.log("Uploaded SRT");
+                console.log(result.data);
+                localStorage.setItem("jobStruct", JSON.stringify(result.data));
+                window.location.reload();
+            })
+            .catch(err => {
+                console.log("Error : " + err);
+            });
+        // const storedJobStruct = localStorage.getItem("jobStruct");
+        // if (storedJobStruct) {
+        //     var jobStruct = JSON.parse(storedJobStruct);
+        //     jobStruct.status = "Analysis";
+        //     // console.log("from gotoPreviewPage: ", jobStruct);
+        //     localStorage.setItem("jobStruct", JSON.stringify(jobStruct));
+        //     // console.log(parsedSubtitles);
+        //     localStorage.setItem("parsedSubtitles", JSON.stringify(parsedSubtitles));
+        //     window.location.reload();
+        //     // console.log(JSON.parse(localStorage.getItem("parsedSubtitles")));
+        // }
+        // else {
+        //     console.log("jobStruct not found in localStorage");
+        // }
+
     };
 
     return (
         <Grid
-        item
-        container
-        xs={12}
-        xl={12}
-        sm={12}
-        md={12}
-        style={{
-            marginTop:"2vh",
+            item
+            container
+            xs={12}
+            xl={12}
+            sm={12}
+            md={12}
+            style={{
+                marginTop: "2vh",
                 width: "94vw",
                 height: "74vh",
                 background: "#F8F8F8",
                 boxShadow: "4px 4px 25px 0px rgba(174, 173, 173, 0.25), -4px -4px 25px -4px rgba(174, 173, 173, 0.25)"
-        }}
+            }}
         >
             {/* Header bar container */}
             <Grid
-            item
-            container
-            justifyContent="flex-start"
-            alignContent="center"
-            style={{
-                height: "10%",
+                item
+                container
+                justifyContent="flex-start"
+                alignContent="center"
+                style={{
+                    height: "10%",
                     width: "94vw",
                     background: "#0D558F",
                     position: "relative",
-            }}
+                }}
             >
-                <button style={{border: "none", background: "none", paddingLeft:"1.302vw",position:"relative",zIndex:2,color:"white", pointerEvents: "none",paddingTop:"0.5vh"}} >
+                <button style={{ border: "none", background: "none", paddingLeft: "1.302vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                     <input
-                    type="image"
-                    src="images/Vector-5.png"
-                    style={{ opacity: 0.3, height: mobileDisplay ? "25%":"2.88vh" }}
+                        type="image"
+                        src="images/Vector-5.png"
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh" }}
                     />
                 </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2,color:"white", pointerEvents: "none",paddingTop:"0.5vh"}} >
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                     <input
-                    type="image"
-                    src="images/Vector-4.png"
-                    style={{ opacity: 0.3, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(10%)" }}
+                        type="image"
+                        src="images/Vector-4.png"
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2,color:"white", pointerEvents: "none",paddingTop:"0.5vh"}} >
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                     <input
-                    type="image"
-                    src="images/Group 919.png"
-                    style={{ opacity: 0.3, height: mobileDisplay ? "25%":"3.28vh",filter: "grayscale(10%)" }}
+                        type="image"
+                        src="images/Group 919.png"
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "3.28vh", filter: "grayscale(10%)" }}
                     />
                 </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2,color:"white", pointerEvents: "none",paddingTop:"0.5vh"}} >
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                     <input
-                    type="image"
-                    src="images/Group 601.png"
-                    style={{ opacity: 0.3, height: mobileDisplay ? "25%":"3.19vh",filter: "grayscale(10%)" }}
+                        type="image"
+                        src="images/Group 601.png"
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "3.19vh", filter: "grayscale(10%)" }}
                     />
                 </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2,color:"white", pointerEvents: "none",paddingTop:"0.5vh"}} >
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                     <input
-                    type="image"
-                    src="images/Group 608.png"
-                    style={{ opacity: 0.3, height: mobileDisplay ? "25%":"2.06vh",filter: "grayscale(10%)" }}
+                        type="image"
+                        src="images/Group 608.png"
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.06vh", filter: "grayscale(10%)" }}
                     />
                 </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2,color:"white", pointerEvents: "none",paddingTop:"0.5vh"}} >
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                     <input
-                    type="image"
-                    src="images/Vector-1.png"
-                    style={{ opacity: 0.3, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(10%)" }}
+                        type="image"
+                        src="images/Vector-1.png"
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2,color:"white",paddingTop:"0.5vh"}}>
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", paddingTop: "0.5vh" }}>
                     <input
-                    type="image"
-                    src="images/Undo.png"
-                    /* onMouseEnter={() => setSaveHover3("hover")}
-                    onMouseLeave={() => setSaveHover3("")} */
-                style={{ opacity: 1, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(10%)" }}
-                />
-                </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2,color:"white",paddingTop:"0.5vh"}}>
-                    <input
-                    type="image"
-                    src="images/Redo.png"
-                    /* onMouseEnter={() => setSaveHover4("hover")}
-                    onMouseLeave={() => setSaveHover4("")} 
-                style={ saveHover4 === "hover" ? { opacity: 1, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(10%)" } :  */
-                    style = {{ opacity: 1, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(10%)" }}
+                        type="image"
+                        src="images/Undo.png"
+                        /* onMouseEnter={() => setSaveHover3("hover")}
+                        onMouseLeave={() => setSaveHover3("")} */
+                        style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2,paddingTop:"0.5vh"}}>
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", paddingTop: "0.5vh" }}>
                     <input
-                    type="image"
-                    src="images/Save.png"
-                    alt=" Save "
-                    /* onMouseEnter={() => setSaveHover("hover")}
-                    onMouseLeave={() => setSaveHover("")} */
-                    // onClick={saveASRText}
-                    style={{ opacity: 1, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(100%)" }}
+                        type="image"
+                        src="images/Redo.png"
+                        /* onMouseEnter={() => setSaveHover4("hover")}
+                        onMouseLeave={() => setSaveHover4("")} 
+                    style={ saveHover4 === "hover" ? { opacity: 1, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(10%)" } :  */
+                        style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
-                <button style={{border: "none", background: "none", paddingLeft:"0.60vw",position:"relative",zIndex:2}}>
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, paddingTop: "0.5vh" }}>
                     <input
-                    type='image'
-                    src='images/download.png'
-                    alt=' Download '
-                    /* onMouseEnter={() => setSaveHover2("hover")}
-                    onMouseLeave={() => setSaveHover2("")} */
-                    // onClick={downloadASRVtt}
-                    style={{ opacity: 1, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(100%)" }}
+                        type="image"
+                        src="images/Save.png"
+                        alt=" Save "
+                        /* onMouseEnter={() => setSaveHover("hover")}
+                        onMouseLeave={() => setSaveHover("")} */
+                        // onClick={saveASRText}
+                        style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(100%)" }}
+                    />
+                </button>
+                <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2 }}>
+                    <input
+                        type='image'
+                        src='images/download.png'
+                        alt=' Download '
+                        /* onMouseEnter={() => setSaveHover2("hover")}
+                        onMouseLeave={() => setSaveHover2("")} */
+                        // onClick={downloadASRVtt}
+                        style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(100%)" }}
                     />
                 </button>
             </Grid>
 
             {/* SRTEditor container */}
             <Grid
-            item
-            container
-            direction="column"
-            alignItems="flex-start"
-            style={{
-                width: "50%",
+                item
+                container
+                direction="column"
+                alignItems="flex-start"
+                style={{
+                    width: "50%",
                     height: "65vh",
                     marginTop: "1vw",
                     marginLeft: "2vw"
-            }}
+                }}
             >
-                <span style={{fontFamily:"Montserrat",color:"#6c6c6c",fontSize:"16px",fontWeight:500}}>SRT file</span>
+                <span style={{ fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "16px", fontWeight: 500 }}>SRT file</span>
                 <SRTViewer
-                    // setSeekTime={setSeekTime}
-                    subtitles={sampleSRT}
-                    // changesFunction={props.setChangesMessage}
-                    // changesMessage={props.changesMessage}
-                    // warning={props.warning}
-                    // setWarning={props.setWarning}
-                    // setMessage={props.setMessage}
-                    filesURLsObject={""}
-                    // file={file}
-                    isLoading={""}
-                    setIsCurrentTaskRunning={""}
-                    // merge={merge}
-                    // split={split}
-                    // downloadData = {downloadData}
-                    // setDownloadData = {setDownloadData}
-                    // deleteSubtitle={deleteSubtitle}
-                    // progress={data_task ? data_task.findATask.Progress: "loading"}
-                    />
+                    subtitles={parsedSubtitles}
+                />
 
             </Grid>
 
@@ -375,7 +342,7 @@ const EmotionDetection = (props) => {
                             <Grid item style={{ paddingBottom: "10px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "inline-block", maxWidth: "20em", fontSize: "18px", fontWeight: "600", color: "#7b7b7b", }} >
                                 <span style={{ fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "20px", fontWeight: 500 }}>Recorded Footage</span>
                             </Grid>
-                            <Grid item>
+                            {/* <Grid item>
                                 <div style={{ display: 'flex' }}>
 
                                     <div className="video-player">
@@ -386,7 +353,15 @@ const EmotionDetection = (props) => {
                                         ) : null}
                                     </div>
                                 </div>
-                            </Grid>
+                            </Grid> */}
+                            <div className="video-player" style={{ display: 'flex' }}>
+                                <ReactPlayer
+                                    className="live-player"
+                                    url={recordingSrc}
+                                    controls={true}
+                                />
+                                {/* <video className="live-player" src={videoSrc} type="video/webm" controls></video> */}
+                            </div>
                         </Grid>
                     </Tooltip>
                 </Grid>
@@ -446,23 +421,23 @@ const EmotionDetection = (props) => {
                 </Grid>
             </Grid>
             */}
-            <Grid item container justifyContent="center" style={{height:"5%"}}>
-            {/* <Grid item xs={12} align={'center'}> */}
-                    <Button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            gotoPreviewPage();
-                        }}
-                        type="button"
-                        disableRipple={true}
-                        // disabled={!recordedVideo}
-                        style={{ backgroundColor: '#0e66ac', borderRadius: '4px', padding: "15px", color: "white", fontSize: "14px", paddingLeft:"5%", paddingRight:"5%"}}
-                    >
-                        <span>NEXT</span>
-                    </Button>
-            {/* </Grid> */}
+            <Grid item container justifyContent="center" style={{ height: "5%" }}>
+                {/* <Grid item xs={12} align={'center'}> */}
+                <Button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        gotoPreviewPage();
+                    }}
+                    type="button"
+                    disableRipple={true}
+                    // disabled={!recordedVideo}
+                    style={{ backgroundColor: '#0e66ac', borderRadius: '4px', padding: "15px", color: "white", fontSize: "14px", paddingLeft: "5%", paddingRight: "5%" }}
+                >
+                    <span>NEXT</span>
+                </Button>
+                {/* </Grid> */}
             </Grid>
-            <Grid item container justifyContent="center" style={{height:"5%"}}></Grid>
+            <Grid item container justifyContent="center" style={{ height: "5%" }}></Grid>
         </Grid>
     );
 };

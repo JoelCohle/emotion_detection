@@ -50,7 +50,8 @@ const TTSTarget = (props) => {
                                 id={'chunk' + i}
                                 style={{
                                     padding: '0.7vh 0.7vh',//'1.4vh 0.7vh',
-                                    minWidth: ((toSeconds(subtitles[i].end, true) - toSeconds(subtitles[i].start, true)) * 7) + '%',
+                                    width: ((toSeconds(subtitles[i].end, true) - toSeconds(subtitles[i].start, true)) * 7) + '%',
+                                    minWidth: '7%',
                                     position: 'relative',
                                     left: i > 0 ? giveGap + '%' : '3.5%',
                                     fontSize: 'clamp(14px, 1.67vh, 20px)',

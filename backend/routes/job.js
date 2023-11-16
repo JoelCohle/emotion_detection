@@ -89,10 +89,25 @@ router.post('/update', videoupload.single('recording'), (req, res) => {
 
 // update SRT to existing job and save to file location
 router.post('/updateSRT', SRTupload.single('srt'), (req, res) => {
-
     userJobs.updateOne({ _id: req.body._id }, {
         $set: {
             SRT: "../frontend/public/userSRTs/" + req.body.name,
+        }
+    })
+        .then(updatedJob => {
+            console.log(updatedJob);
+            res.status(200).json(updatedJob);
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Failed to update job', details: err })
+        })
+});
+
+// update status of job
+router.post('/updateStatus', (req, res) => {
+    userJobs.updateOne({ _id: req.body._id }, {
+        $set: {
+            status: req.body.status,
         }
     })
         .then(updatedJob => {
@@ -229,6 +244,12 @@ router.get("/getscript", async function (req, res) {
     const scriptName = req.query.scriptName;
     const scriptPath = path.join(__dirname, "../../frontend/public/userScripts/", scriptName);
     res.sendFile(scriptPath);
+});
+
+router.get("/getSRT", async function (req, res) {
+    const SRTName = req.query.name;
+    const SRTPath = path.join(__dirname, "../../frontend/public/userSRTs/", SRTName);
+    res.sendFile(SRTPath);
 });
 
 router.get("/getjobs", async function (req, res) {

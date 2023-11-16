@@ -2,7 +2,47 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
+const useStyles =
+    makeStyles(
+        (theme) =>
+        (
+            {
+                inputDiv:
+                {
+                    width: '100%',
+                    minHeight: '3.47vh',
+                    color: '#7d7d7d',
+                    marginTop: '1.9vh',
+                    paddingLeft: 'calc(2.86vw + 2.59vh)',
+                    whiteSpace: 'pre-line',
+                    '&:focus':
+                    {
+                        outline: 'none'
+                    }
+                },
+                timeInput:
+                {
+                    width: '3.79vw',//'32.73%''auto',
+                    height: '80%',
+                    fontSize: '80%',
+                    color: '#7b7b7b',
+                    whiteSpace: 'nowrap',
+                    // overflow: 'auto',
+                    '&:focus':
+                    {
+                        outline: 'none'
+                    },
+                    '&::-webkit-scrollbar':
+                    {
+                        display: 'none'
+                    }
+                },
+            }
+        )
+    );
+
 const Subtitle = (props) => {
+    const classes = useStyles();
 
     return (
     <>
@@ -48,19 +88,13 @@ const Subtitle = (props) => {
                     >
                         <span
                             // id={`${props.startTimeID ? props.startTimeID : ''}${props.index}`}
-                            // contentEditable={props.isEditable === undefined || props.isEditable === true ? true : false}
                             contentEditable={false}
-                            // className={classes.timeInput}
-                            // onFocus={props.isEditable === undefined || props.isEditable === true ? () => preEditStartTime(props.index) : () => { }}
-                            // onBlur={props.isEditable === undefined || props.isEditable === true ? () => postEditStartTime(props.index) : () => { }}
-                            // onInput={props.isEditable === undefined || props.isEditable === true ? () => editingStartTime(props.index) : () => { }}
-                            // onClick={() => props.changeSeekTime(props.index)}
+                            className={classes.timeInput}
                             justifyContent="center"
                             alignItems="center"
-                            style={{ backgroundColor: '#E7F4FF', width: "3.8vw", fontSize: "16px", borderRadius: "4px", paddingLeft: "2px" }}
+                            style={{ backgroundColor: '#E7F4FF', width: "4.5vw", fontSize: "16px", borderRadius: "4px", paddingLeft: "2px" }}
                         >
                             {/*props.subtitle ? props.subtitle.start.slice(0, 8) : null*/}
-                            {/*props.subtitle ? props.subtitle.start : null*/}
                             {props.startTime.slice(0, 8)}
                         </span>
                         <Grid item >
@@ -68,19 +102,13 @@ const Subtitle = (props) => {
                         </Grid>
                         <div
                             id={`${props.endTimeID ? props.endTimeID : ''}${props.index}`}
-                            // contentEditable={props.isEditable === undefined || props.isEditable === true ? true : false}
                             contentEditable={false}
-                            // className={classes.timeInput}
-                            // onFocus={props.isEditable === undefined || props.isEditable === true ? () => preEditEndTime(props.index) : () => { }}
-                            // onBlur={props.isEditable === undefined || props.isEditable === true ? () => postEditEndTime(props.index) : () => { }}
-                            // onInput={props.isEditable === undefined || props.isEditable === true ? () => editingEndTime(props.index) : () => { }}
-                            // onClick={() => props.changeSeekTime(props.index)}
+                            className={classes.timeInput}
                             justifyContent="center"
                             alignItems="center"
-                            style={{ backgroundColor: '#E7F4FF', width: "3.8vw", fontSize: "16px", borderRadius: "4px", paddingLeft: "2px" }}
+                            style={{ backgroundColor: '#E7F4FF', width: "4.5vw", fontSize: "16px", borderRadius: "4px", paddingLeft: "2px" }}
                         >
                             {/*props.subtitle ? props.subtitle.end.slice(0, 8) : null*/}
-                            {/*props.subtitle ? props.subtitle.end : null*/}
                             {props.endTime.slice(0, 8)}
                         </div>
                         {/* </Grid> */}
@@ -104,9 +132,7 @@ const Subtitle = (props) => {
                 id={`${props.subtitleTextID ? props.subtitleTextID : ''}${props.index}`}
                 class='input'
                 role='textbox'
-                contentEditable={props.isEditable === undefined || props.isEditable === true ? true : false}
-                // className={classes.inputDiv}
-                // onClick={() => props.changeSeekTime(props.index)}
+                className={classes.inputDiv}
             >
                 {/*props.subtitle ? props.subtitle.text : null*/}
                 {props.text}

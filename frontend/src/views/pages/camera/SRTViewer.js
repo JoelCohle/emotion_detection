@@ -17,44 +17,9 @@ const loaderStyles = css`
 
 const sampleSubtitles = ["gfsdgfdgd ", "s;dflajs;ld"];
 
-function parseSrt(srtContent) {
-    // Split the SRT content into individual subtitle blocks
-    const subtitleBlocks = srtContent.split(/\n\s*\n/);
-
-    // Parse each subtitle block
-    const subtitles = subtitleBlocks.map((block) => {
-        const lines = block.trim().split('\n');
-        if (lines.length >= 3) {
-            const id = parseInt(lines[0], 10);
-            const [start, end] = lines[1].split(' --> ');
-            const text = lines.slice(2).join('\n');
-
-            return {
-                id,
-                start,
-                end,
-                text,
-            };
-        }
-        return null; // Invalid subtitle block
-    });
-
-    // Filter out null values (invalid subtitle blocks)
-    return subtitles.filter((subtitle) => subtitle !== null);
-}
-
 const SRTViewer = (props) => {
 
     const [subtitles, setSubtitles] = useState(null);
-    const [parsedSubtitles, setParsedSubtitles] = useState(null);
-    // let parsedSubtitles;
-
-    useEffect(() => {
-        console.log(localStorage);
-        console.log(props.subtitles);
-        setParsedSubtitles(parseSrt(props.subtitles));
-        console.log(parsedSubtitles);
-    }, []);
 
     return (
         <Grid
@@ -73,14 +38,14 @@ const SRTViewer = (props) => {
             overflow: 'hidden',
           }}
         >
-        <div style={{ flex: 1, overflowY: 'scroll', padding: '20px' }}>
-            {!parsedSubtitles ? (
+        <div style={{ flex: 1, height: '100%', overflowY: 'scroll', padding: '20px' }}>
+            {!props.subtitles ? (
               <div css={loaderStyles} style={{ paddingLeft: '42%' }}>
                 <CircularProgress style={{color: "rgb(14, 102, 172)"}} size={100} />
               </div>
             ) : (
               // props.subtitles.map((subtitle, index) => (
-              parsedSubtitles.map((subtitle, index) => (
+              props.subtitles.map((subtitle, index) => (
                 // <div onClick={() => changeSeekTime(index)}>
                 <div>
                   <Grid
@@ -102,16 +67,6 @@ const SRTViewer = (props) => {
                       endTime={subtitle.end}
                       text={subtitle.text}
                       subtitle={subtitle}
-                      // changeSeekTime={changeSeekTime}
-                      // isValidTime={isValidTime}
-                      timeRangeID='timeSpan'
-                      startTimeID='startSpan'
-                      endTimeID='endSpan'
-                      isEditable={false}
-                      subtitleTextID={'text'}
-                      // merge={props.merge}
-                      // split={props.split}
-                      // deleteSubtitle={props.deleteSubtitle}
                     />
 
                     <Grid
