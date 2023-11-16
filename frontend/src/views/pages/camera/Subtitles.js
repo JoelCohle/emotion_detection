@@ -47,7 +47,7 @@ const Subtitle = (props) => {
                         }}
                     >
                         <span
-                            id={`${props.startTimeID ? props.startTimeID : ''}${props.index}`}
+                            // id={`${props.startTimeID ? props.startTimeID : ''}${props.index}`}
                             // contentEditable={props.isEditable === undefined || props.isEditable === true ? true : false}
                             contentEditable={false}
                             // className={classes.timeInput}
@@ -59,7 +59,9 @@ const Subtitle = (props) => {
                             alignItems="center"
                             style={{ backgroundColor: '#E7F4FF', width: "3.8vw", fontSize: "16px", borderRadius: "4px", paddingLeft: "2px" }}
                         >
-                            {props.subtitle ? props.subtitle.start.slice(0, 8) : null}
+                            {/*props.subtitle ? props.subtitle.start.slice(0, 8) : null*/}
+                            {/*props.subtitle ? props.subtitle.start : null*/}
+                            {props.startTime.slice(0, 8)}
                         </span>
                         <Grid item >
                             <img src='images/Arrow.png' />
@@ -77,7 +79,9 @@ const Subtitle = (props) => {
                             alignItems="center"
                             style={{ backgroundColor: '#E7F4FF', width: "3.8vw", fontSize: "16px", borderRadius: "4px", paddingLeft: "2px" }}
                         >
-                            {props.subtitle ? props.subtitle.end.slice(0, 8) : null}
+                            {/*props.subtitle ? props.subtitle.end.slice(0, 8) : null*/}
+                            {/*props.subtitle ? props.subtitle.end : null*/}
+                            {props.endTime.slice(0, 8)}
                         </div>
                         {/* </Grid> */}
                     </Grid>
@@ -104,7 +108,8 @@ const Subtitle = (props) => {
                 // className={classes.inputDiv}
                 // onClick={() => props.changeSeekTime(props.index)}
             >
-                {props.subtitle ? props.subtitle.text : null}
+                {/*props.subtitle ? props.subtitle.text : null*/}
+                {props.text}
             </div>
         </div>
     </>

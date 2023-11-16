@@ -186,31 +186,31 @@ const WebcamCapture = (props) => {
         uploadData.append('status', "Recorded");
         console.log(uploadData)
 
-        // axios.post('http://localhost:4000/job/update', uploadData, {
-        //     headers : {
-        //         'Content-Type': 'multipart/form-data'
-        //     }
-        // })
-        //     .then(res => {
-        //         console.log("Uploaded");
-        //         console.log(res);
-        //         var jobStruct = {
-        //             _id: job._id,
-        //             status: "Recorded",
-        //             name: job.name,
-        //             sourceLanguage: job.sourceLanguage,
-        //             createdAt: job.createdAt,
-        //             index: job.index,
-        //             recordingSrc: "../frontend/public/userRecordings/" + name,
-        //             scriptSrc: job.scriptSrc,
-        //             updatedAt: job.updatedAt,
-        //         };
-        //         localStorage.setItem("jobStruct", JSON.stringify(jobStruct));
-        //         // window.location.reload();    
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //     });
+        axios.post('http://localhost:4000/job/update', uploadData, {
+            headers : {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then(res => {
+                console.log("Uploaded");
+                console.log(res);
+                var jobStruct = {
+                    _id: job._id,
+                    status: "Recorded",
+                    name: job.name,
+                    sourceLanguage: job.sourceLanguage,
+                    createdAt: job.createdAt,
+                    index: job.index,
+                    recordingSrc: "../frontend/public/userRecordings/" + name,
+                    scriptSrc: job.scriptSrc,
+                    updatedAt: job.updatedAt,
+                };
+                localStorage.setItem("jobStruct", JSON.stringify(jobStruct));
+                // window.location.reload();    
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     return (
