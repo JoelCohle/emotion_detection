@@ -13,6 +13,11 @@ const userJobs = new Schema({
         required: false,
         unique: false,
     },
+    SRT: {
+        type: String,
+        required: false,
+        unique: false,
+    },
 	email: {
 		type: String,
 		required: true,

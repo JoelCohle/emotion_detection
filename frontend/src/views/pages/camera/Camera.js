@@ -172,7 +172,7 @@ const WebcamCapture = (props) => {
         return file
     }
 
-    const uploadvideo = (src) => {
+    const uploadvideo = async (src) => {
         
         console.log("Upload")
         // strip job.name and remove the file extension
@@ -186,7 +186,7 @@ const WebcamCapture = (props) => {
         uploadData.append('status', "Recorded");
         console.log(uploadData)
 
-        axios.post('http://localhost:4000/job/update', uploadData, {
+        await axios.post('http://localhost:4000/job/update', uploadData, {
             headers : {
                 'Content-Type': 'multipart/form-data'
             }
@@ -206,11 +206,12 @@ const WebcamCapture = (props) => {
                     updatedAt: job.updatedAt,
                 };
                 localStorage.setItem("jobStruct", JSON.stringify(jobStruct));
-                // window.location.reload();    
             })
             .catch(err => {
                 console.log(err);
             });
+        window.location.reload();    
+        
     }
 
     return (

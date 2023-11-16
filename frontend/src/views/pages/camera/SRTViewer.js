@@ -15,7 +15,7 @@ const loaderStyles = css`
   align-items: center;
 `;
 
-const sampleSubtitles = ["BTP sucks", "s;dflajs;ld"];
+const sampleSubtitles = ["gfsdgfdgd ", "s;dflajs;ld"];
 
 function parseSrt(srtContent) {
     // Split the SRT content into individual subtitle blocks
