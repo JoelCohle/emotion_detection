@@ -194,6 +194,7 @@ router.post('/getSubtitles', async (req, res) => {
 
 router.post('/delete', (req, res) => {
     const file1 = req.body.recordingSrc;
+    const file2 = req.body.SRT;
     let success = false;
 
     userJobs.findOneAndDelete({
@@ -212,7 +213,14 @@ router.post('/delete', (req, res) => {
     if (file1 && success) {
         fs.unlinkSync(file1, (err) => {
             if (err) throw err;
-            console.log('File deleted!');
+            console.log('Recording File deleted!');
+        })
+    }
+
+    if (file2 && success) {
+        fs.unlinkSync(file2, (err) => {
+            if (err) throw err;
+            console.log('SRT File deleted!');
         })
     }
 });
