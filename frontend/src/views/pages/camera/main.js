@@ -33,6 +33,7 @@ const RecordVideo = (props) => {
 
     useEffect(() => {
         const jobDetails = JSON.parse(localStorage.getItem("jobStruct"));
+        console.log("printing jobDetails from camera/main.js");
         console.log(jobDetails)
         axios.get("http://localhost:4000/job/getjobdetails", {
             params: { _id: jobDetails._id }
