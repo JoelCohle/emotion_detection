@@ -162,32 +162,32 @@ const PreviewPage = (props) => {
                 <Grid item container style={{ width: '22vw', height: '90%', border: '2px solid #b3b3b3', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', }} >
                     <Grid item container justifyContent="space-between" style={{ width: '22vw', height: '13%', background: '#F0FFFF', margin: '1% 0', padding: '10px 0' }} >
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingLeft: '5%' }}>{audioEmotions.Sad}</Typography>
-                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "18px", fontWeight: 500 }}>Sad</span>
+                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: audioEmotions.Sad === videoEmotions.Sad ? "#6c6c6c" : "#ff0000", fontSize: "18px", fontWeight: 500 }}>Sad</span>
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingRight: '5%' }}>{videoEmotions.Sad}</Typography>
                     </Grid>
                     <Grid item container justifyContent="space-between" style={{ width: '22vw', height: '13%', background: '#F0FFFF', margin: '1% 0', padding: '10px 0' }} >
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingLeft: '5%' }}>{audioEmotions.Surprise}</Typography>
-                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "18px", fontWeight: 500 }}>Surprised</span>
+                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: audioEmotions.Surprise === videoEmotions.Surprise ? "#6c6c6c" : "#ff0000", fontSize: "18px", fontWeight: 500 }}>Surprised</span>
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingRight: '5%' }}>{videoEmotions.Surprise}</Typography>
                     </Grid>
                     <Grid item container justifyContent="space-between" style={{ width: '22vw', height: '13%', background: '#F0FFFF', margin: '1% 0', padding: '10px 0' }} >
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingLeft: '5%' }}>{audioEmotions.Angry}</Typography>
-                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: "#ff0000", fontSize: "18px", fontWeight: 500 }}>Angry</span>
+                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: audioEmotions.Angry === videoEmotions.Angry ? "#6c6c6c" : "#ff0000", fontSize: "18px", fontWeight: 500 }}>Angry</span>
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingRight: '5%' }}>{videoEmotions.Angry}</Typography>
                     </Grid>
                     <Grid item container justifyContent="space-between" style={{ width: '22vw', height: '13%', background: '#F0FFFF', margin: '1% 0', padding: '10px 0' }} >
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingLeft: '5%' }}>{audioEmotions.Happy}</Typography>
-                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "18px", fontWeight: 500 }}>Happy</span>
+                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: audioEmotions.Happy === videoEmotions.Happy ? "#6c6c6c" : "#ff0000", fontSize: "18px", fontWeight: 500 }}>Happy</span>
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingRight: '5%' }}>{videoEmotions.Happy}</Typography>
                     </Grid>
                     <Grid item container justifyContent="space-between" style={{ width: '22vw', height: '13%', background: '#F0FFFF', margin: '1% 0', padding: '10px 0' }} >
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingLeft: '5%' }}>{audioEmotions.Fear}</Typography>
-                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: "#ff0000", fontSize: "18px", fontWeight: 500 }}>Fear</span>
+                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: audioEmotions.Fear === videoEmotions.Fear ? "#6c6c6c" : "#ff0000", fontSize: "18px", fontWeight: 500 }}>Fear</span>
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingRight: '5%' }}>{videoEmotions.Fear}</Typography>
                     </Grid>
                     <Grid item container justifyContent="space-between" style={{ width: '22vw', height: '13%', background: '#F0FFFF', margin: '1% 0', padding: '10px 0' }} >
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingLeft: '5%' }}>{audioEmotions.Neutral}</Typography>
-                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "18px", fontWeight: 500 }}>Neutral</span>
+                        <span style={{ marginBottom: "1vh", fontFamily: "Montserrat", color: audioEmotions.Neutral === videoEmotions.Neutral ? "#6c6c6c" : "#ff0000", fontSize: "18px", fontWeight: 500 }}>Neutral</span>
                         <Typography style={{ fontSize: "18px", fontWeight: 500, color: '#00ff00', paddingRight: '5%' }}>{videoEmotions.Neutral}</Typography>
                     </Grid>
                 </Grid>

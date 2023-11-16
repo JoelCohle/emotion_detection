@@ -14,7 +14,7 @@ const loaderStyles = css`
   align-items: center;
 `;
 
-const sampleSubtitles = ["BTP sucks", "s;dflajs;ld"];
+const sampleSubtitles = ["gfsdgfdgd ", "s;dflajs;ld"];
 
 const SRTViewer = (props) => {
 
