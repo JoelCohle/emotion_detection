@@ -167,6 +167,9 @@ const EmotionDetection = (props) => {
 
     const [mobileDisplay, setMobileDisplay] = useState(false);
 
+    function downloadSRT() {
+    }
+
     const gotoPreviewPage = async () => {
         // const uploadData = new FormData();
         // uploadData.append('_id', job._id);
@@ -228,6 +231,7 @@ const EmotionDetection = (props) => {
                     position: "relative",
                 }}
             >
+                {/*
                 <button style={{ border: "none", background: "none", paddingLeft: "1.302vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                     <input
                         type="image"
@@ -270,13 +274,14 @@ const EmotionDetection = (props) => {
                         style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
+                */}
                 <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", paddingTop: "0.5vh" }}>
                     <input
                         type="image"
                         src="images/Undo.png"
                         /* onMouseEnter={() => setSaveHover3("hover")}
                         onMouseLeave={() => setSaveHover3("")} */
-                        style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
                 <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", paddingTop: "0.5vh" }}>
@@ -286,7 +291,7 @@ const EmotionDetection = (props) => {
                         /* onMouseEnter={() => setSaveHover4("hover")}
                         onMouseLeave={() => setSaveHover4("")} 
                     style={ saveHover4 === "hover" ? { opacity: 1, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(10%)" } :  */
-                        style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
                 <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, paddingTop: "0.5vh" }}>
@@ -297,7 +302,7 @@ const EmotionDetection = (props) => {
                         /* onMouseEnter={() => setSaveHover("hover")}
                         onMouseLeave={() => setSaveHover("")} */
                         // onClick={saveASRText}
-                        style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(100%)" }}
+                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(100%)" }}
                     />
                 </button>
                 <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2 }}>
@@ -307,7 +312,7 @@ const EmotionDetection = (props) => {
                         alt=' Download '
                         /* onMouseEnter={() => setSaveHover2("hover")}
                         onMouseLeave={() => setSaveHover2("")} */
-                        // onClick={downloadASRVtt}
+                        onClick={downloadSRT}
                         style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(100%)" }}
                     />
                 </button>
