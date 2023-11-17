@@ -173,7 +173,7 @@ const WebcamCapture = (props) => {
     }
 
     const uploadvideo = async (src) => {
-        
+
         console.log("Upload")
         // strip job.name and remove the file extension
         var name = job.name.split("/").pop().replace(".txt", ".webm")
@@ -187,7 +187,7 @@ const WebcamCapture = (props) => {
         console.log(uploadData)
 
         await axios.post('http://localhost:4000/job/update', uploadData, {
-            headers : {
+            headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
@@ -210,8 +210,8 @@ const WebcamCapture = (props) => {
             .catch(err => {
                 console.log(err);
             });
-        window.location.reload();    
-        
+        window.location.reload();
+
     }
 
     return (
@@ -225,21 +225,47 @@ const WebcamCapture = (props) => {
                 <Grid item container justifyContent="space-between" alignContent="center"
                     style={{ height: "10%", width: "94vw", background: "#0D558F", position: "relative", }} >
                     {/* <Grid item container justifyContent="flex-start" alignItems="center" spacing={2}> */}
-                    <Grid item>
-                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                    <Grid item style={{ marginLeft: "1.5vw" }}>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Undo.png"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)" }}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
                             />
                         </button>
                     </Grid>
                     <Grid item>
-                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Redo.png"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)" }}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
+                            />
+                        </button>
+                    </Grid>
+                    <Grid item>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
+                            <input
+                                type="image"
+                                src="images/Save.png"
+                                alt=" Save "
+                                /* onMouseEnter={() => setSaveHover("hover")}
+                                onMouseLeave={() => setSaveHover("")} */
+                                // onClick={saveASRText}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
+                            />
+                        </button>
+                    </Grid>
+                    <Grid item>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
+                            <input
+                                type='image'
+                                src='images/download.png'
+                                alt=' Download '
+                                /* onMouseEnter={() => setSaveHover2("hover")}
+                                onMouseLeave={() => setSaveHover2("")} */
+                                // onClick={downloadSRT}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
                             />
                         </button>
                     </Grid>
@@ -247,32 +273,32 @@ const WebcamCapture = (props) => {
                     {/* <Grid item container justifyContent="flex-end" alignItems="center" spacing={2}> */}
                     <Grid item style={{ flexGrow: 1 }} />
                     <Grid item>
-                        <button onClick={startRecording} style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", paddingRight: "0.45vw", position: "relative", zIndex: 2, paddingTop: "0.5vh" }}>
+                        <button onClick={startRecording} style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, paddingTop: "0.8vh" }}>
                             <input
                                 type="image"
                                 src="images/record.jpg"
                                 alt=" "
                                 onMouseEnter={() => setSaveHover("hover")}
                                 onMouseLeave={() => setSaveHover("")}
-                                style={{ maxWidth: "100%", width: "auto", height: "auto", ...saveHover === "hover" ? { opacity: 1, filter: "grayscale(100%)" } : { opacity: 0.7, filter: "grayscale(100%)" } }}
+                                style={{ maxWidth: "100%", height: "5vh", ...saveHover === "hover" ? { opacity: 1, filter: "grayscale(100%)" } : { opacity: 0.7, filter: "grayscale(100%)" } }}
                             />
                         </button>
                     </Grid>
                     <Grid item>
-                        <button style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.35vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1vh" }} >
                             <input
                                 type="image"
                                 src="images/Stop.jpg"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", width: "auto", height: "auto" }}
+                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", height: "4.5vh" }}
                             />
                         </button>
                     </Grid>
-                    <Grid item>
-                        <button style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                    <Grid item marginRight="5.5vw">
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.2vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Retake.jpg"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", width: "auto", height: "auto" }}
+                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", height: "5.5vh" }}
                             />
                         </button>
                     </Grid>
@@ -285,21 +311,47 @@ const WebcamCapture = (props) => {
                 <Grid item container justifyContent="space-between" alignContent="center"
                     style={{ height: "10%", width: "94vw", background: "#0D558F", position: "relative", }} >
                     {/* <Grid item container justifyContent="flex-start" alignItems="center" spacing={2}> */}
-                    <Grid item>
-                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                    <Grid item style={{ marginLeft: "1.5vw" }}>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Undo.png"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)" }}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
                             />
                         </button>
                     </Grid>
                     <Grid item>
-                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Redo.png"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)" }}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
+                            />
+                        </button>
+                    </Grid>
+                    <Grid item>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
+                            <input
+                                type="image"
+                                src="images/Save.png"
+                                alt=" Save "
+                                /* onMouseEnter={() => setSaveHover("hover")}
+                                onMouseLeave={() => setSaveHover("")} */
+                                // onClick={saveASRText}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
+                            />
+                        </button>
+                    </Grid>
+                    <Grid item>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
+                            <input
+                                type='image'
+                                src='images/download.png'
+                                alt=' Download '
+                                /* onMouseEnter={() => setSaveHover2("hover")}
+                                onMouseLeave={() => setSaveHover2("")} */
+                                // onClick={downloadSRT}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
                             />
                         </button>
                     </Grid>
@@ -307,32 +359,32 @@ const WebcamCapture = (props) => {
                     {/* <Grid item container justifyContent="flex-end" alignItems="center" spacing={2}> */}
                     <Grid item style={{ flexGrow: 1 }} />
                     <Grid item>
-                        <button style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none",  paddingTop: "0.8vh" }} >
                             <input
                                 type="image"
                                 src="images/record.jpg"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", width: "auto", height: "auto" }}
+                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", height: "5vh" }}
                             />
                         </button>
                     </Grid>
                     <Grid item>
-                        <button onClick={stopRecording} style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", paddingRight: "0.45vw", position: "relative", zIndex: 2, paddingTop: "0.5vh" }}>
+                        <button onClick={stopRecording} style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, paddingTop: "1vh"}}>
                             <input
                                 type="image"
                                 src="images/Stop.jpg"
                                 alt=" "
                                 onMouseEnter={() => setSaveHover("hover")}
                                 onMouseLeave={() => setSaveHover("")}
-                                style={{ maxWidth: "100%", width: "auto", height: "auto", ...saveHover === "hover" ? { opacity: 1, filter: "grayscale(100%)" } : { opacity: 0.7, filter: "grayscale(100%)" } }}
+                                style={{ maxWidth: "100%",  height: "4.5vh", ...saveHover === "hover" ? { opacity: 1, filter: "grayscale(100%)" } : { opacity: 0.7, filter: "grayscale(100%)" } }}
                             />
                         </button>
                     </Grid>
-                    <Grid item>
-                        <button style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                    <Grid item marginRight="5.5vw">
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Retake.jpg"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", width: "auto", height: "auto" }}
+                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", height: "5.5vh" }}
                             />
                         </button>
                     </Grid>
@@ -345,21 +397,47 @@ const WebcamCapture = (props) => {
                 <Grid item container justifyContent="space-between" alignContent="center"
                     style={{ height: "10%", width: "94vw", background: "#0D558F", position: "relative", }} >
                     {/* <Grid item container justifyContent="flex-start" alignItems="center" spacing={2}> */}
-                    <Grid item>
-                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                    <Grid item style={{ marginLeft: "1.5vw" }}>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Undo.png"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)" }}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
                             />
                         </button>
                     </Grid>
                     <Grid item>
-                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
                             <input
                                 type="image"
                                 src="images/Redo.png"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)" }}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
+                            />
+                        </button>
+                    </Grid>
+                    <Grid item>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
+                            <input
+                                type="image"
+                                src="images/Save.png"
+                                alt=" Save "
+                                /* onMouseEnter={() => setSaveHover("hover")}
+                                onMouseLeave={() => setSaveHover("")} */
+                                // onClick={saveASRText}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
+                            />
+                        </button>
+                    </Grid>
+                    <Grid item>
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "1.5vh" }} >
+                            <input
+                                type='image'
+                                src='images/download.png'
+                                alt=' Download '
+                                /* onMouseEnter={() => setSaveHover2("hover")}
+                                onMouseLeave={() => setSaveHover2("")} */
+                                // onClick={downloadSRT}
+                                style={{ opacity: 0.3, height: "3.5vh", filter: "grayscale(10%)" }}
                             />
                         </button>
                     </Grid>
@@ -367,32 +445,32 @@ const WebcamCapture = (props) => {
                     {/* <Grid item container justifyContent="flex-end" alignItems="center" spacing={2}> */}
                     <Grid item style={{ flexGrow: 1 }} />
                     <Grid item>
-                        <button style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none", paddingTop: "0.5vh" }} >
+                        <button style={{ border: "none", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, color: "white", pointerEvents: "none",  paddingTop: "0.8vh" }} >
                             <input
                                 type="image"
                                 src="images/record.jpg"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", width: "auto", height: "auto" }}
+                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", height: "5vh" }}
                             />
                         </button>
                     </Grid>
                     <Grid item>
-                        <button style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", paddingRight: "0.45vw", position: "relative", zIndex: 2, pointerEvents: "none", paddingTop: "0.5vh" }} >
+                        <button style={{ border: "none",  background: "none", paddingLeft: "0.35vw", position: "relative", zIndex: 2, pointerEvents: "none", paddingTop: "1vh"}} >
                             <input
                                 type="image"
                                 src="images/Stop.jpg"
-                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", width: "auto", height: "auto" }}
+                                style={{ opacity: 0.3, filter: "grayscale(10%)", maxWidth: "100%", height: "4.5vh" }}
                             />
                         </button>
                     </Grid>
-                    <Grid item>
-                        <button onClick={getCameraPermission} style={{ border: "none", width: "50px", background: "none", paddingLeft: "0.45vw", position: "relative", zIndex: 2, paddingTop: "0.5vh" }}>
+                    <Grid item marginRight="5.5vw">
+                        <button onClick={getCameraPermission} style={{ border: "none", background: "none", paddingLeft: "0.2vw", position: "relative", zIndex: 2, paddingTop: "0.5vh" }}>
                             <input
                                 type="image"
                                 src="images/Retake.jpg"
                                 alt=" "
                                 onMouseEnter={() => setSaveHover("hover")}
                                 onMouseLeave={() => setSaveHover("")}
-                                style={{ maxWidth: "100%", width: "auto", height: "auto", ...saveHover === "hover" ? { opacity: 1, filter: "grayscale(100%)" } : { opacity: 0.7, filter: "grayscale(100%)" } }}
+                                style={{ maxWidth: "100%",  height: "5.5vh", ...saveHover === "hover" ? { opacity: 1, filter: "grayscale(100%)" } : { opacity: 0.7, filter: "grayscale(100%)" } }}
                             />
                         </button>
                     </Grid>
@@ -450,23 +528,23 @@ const WebcamCapture = (props) => {
                     </Tooltip>
                 </Grid>
             </Grid>
-            <Grid item container justifyContent="center" style={{height:"5%"}}>
-            {/* <Grid item xs={12} align={'center'}> */}
-                    <Button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            uploadvideo(recordedVideo);
-                        }}
-                        type="button"
-                        disableRipple={true}
-                        disabled={!recordedVideo}
-                        style={{ backgroundColor: recordedVideo ? '#0e66ac':'#C0C0C0', borderRadius: '4px', padding: "15px", color: "white", fontSize: "14px", paddingLeft:"5%", paddingRight:"5%"}}
-                    >
-                        <span>NEXT</span>
-                    </Button>
-            {/* </Grid> */}
+            <Grid item container justifyContent="center" style={{ height: "5%" }}>
+                {/* <Grid item xs={12} align={'center'}> */}
+                <Button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        uploadvideo(recordedVideo);
+                    }}
+                    type="button"
+                    disableRipple={true}
+                    disabled={!recordedVideo}
+                    style={{ backgroundColor: recordedVideo ? '#0e66ac' : '#C0C0C0', borderRadius: '4px', padding: "15px", color: "white", fontSize: "14px", paddingLeft: "5%", paddingRight: "5%" }}
+                >
+                    <span>NEXT</span>
+                </Button>
+                {/* </Grid> */}
             </Grid>
-            <Grid item container justifyContent="center" style={{height:"5%"}}></Grid>
+            <Grid item container justifyContent="center" style={{ height: "5%" }}></Grid>
         </Grid>
     );
 };
