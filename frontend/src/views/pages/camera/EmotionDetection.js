@@ -42,7 +42,7 @@ const EmotionDetection = (props) => {
     const [parsedSubtitles, setParsedSubtitles] = useState(null);
 
     useEffect(() => {
-        if(srt){
+        if (srt) {
             setParsedSubtitles(parseSrt(srt));
             console.log(parsedSubtitles);
         }
@@ -54,7 +54,7 @@ const EmotionDetection = (props) => {
         setJob(jobDetails)
         var filename = jobDetails.name.split("/").pop().replace(".txt", ".srt")
         axios.get('http://localhost:4000/job/getSRT', {
-            params: { name: filename}
+            params: { name: filename }
         })
             .then((response) => {
                 setSrt(response.data);
@@ -83,18 +83,27 @@ const EmotionDetection = (props) => {
     const [mobileDisplay, setMobileDisplay] = useState(false);
 
     function downloadSRT() {
+        if (srt){
+            const blob = new Blob([srt], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `${job.name.split('/').pop().replace('.txt','.srt')}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     }
 
     const gotoPreviewPage = async () => {
         // const uploadData = new FormData();
         // uploadData.append('_id', job._id);
         // uploadData.append('status', "Analysis");
-        const jobData = { '_id':  job._id, 'status': "Analysis"}
+        const jobData = { '_id': job._id, 'status': "Analysis" }
         await axios.post('http://localhost:4000/job/updateStatus', jobData)
             .then(result => {
                 console.log("Uploaded SRT");
                 console.log(result.data);
-                localStorage.setItem("jobStruct", JSON.stringify(result.data));
+                // localStorage.setItem("jobStruct", JSON.stringify(result.data));
                 window.location.reload();
             })
             .catch(err => {
@@ -118,13 +127,7 @@ const EmotionDetection = (props) => {
     };
 
     return (
-        <Grid
-            item
-            container
-            xs={12}
-            xl={12}
-            sm={12}
-            md={12}
+        <Grid item container xs={12} xl={12} sm={12} md={12}
             style={{
                 marginTop: "2vh",
                 width: "94vw",
@@ -134,11 +137,7 @@ const EmotionDetection = (props) => {
             }}
         >
             {/* Header bar container */}
-            <Grid
-                item
-                container
-                justifyContent="flex-start"
-                alignContent="center"
+            <Grid item container justifyContent="flex-start" alignContent="center"
                 style={{
                     height: "10%",
                     width: "94vw",
@@ -196,7 +195,7 @@ const EmotionDetection = (props) => {
                         src="images/Undo.png"
                         /* onMouseEnter={() => setSaveHover3("hover")}
                         onMouseLeave={() => setSaveHover3("")} */
-                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
+                        style={{ opacity: 0.3, height: "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
                 <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, color: "white", paddingTop: "0.5vh" }}>
@@ -206,7 +205,7 @@ const EmotionDetection = (props) => {
                         /* onMouseEnter={() => setSaveHover4("hover")}
                         onMouseLeave={() => setSaveHover4("")} 
                     style={ saveHover4 === "hover" ? { opacity: 1, height: mobileDisplay ? "25%":"2.88vh",filter: "grayscale(10%)" } :  */
-                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(10%)" }}
+                        style={{ opacity: 0.3, height: "2.88vh", filter: "grayscale(10%)" }}
                     />
                 </button>
                 <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2, paddingTop: "0.5vh" }}>
@@ -217,7 +216,7 @@ const EmotionDetection = (props) => {
                         /* onMouseEnter={() => setSaveHover("hover")}
                         onMouseLeave={() => setSaveHover("")} */
                         // onClick={saveASRText}
-                        style={{ opacity: 0.3, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(100%)" }}
+                        style={{ opacity: 0.3, height:  "2.88vh", filter: "grayscale(100%)" }}
                     />
                 </button>
                 <button style={{ border: "none", background: "none", paddingLeft: "0.60vw", position: "relative", zIndex: 2 }}>
@@ -228,7 +227,7 @@ const EmotionDetection = (props) => {
                         /* onMouseEnter={() => setSaveHover2("hover")}
                         onMouseLeave={() => setSaveHover2("")} */
                         onClick={downloadSRT}
-                        style={{ opacity: 1, height: mobileDisplay ? "25%" : "2.88vh", filter: "grayscale(100%)" }}
+                        style={{ opacity: 1, height: "2.88vh", filter: "grayscale(100%)" }}
                     />
                 </button>
             </Grid>
