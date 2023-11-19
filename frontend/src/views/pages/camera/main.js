@@ -143,7 +143,7 @@ const RecordVideo = (props) => {
                     </div>
                 )}
 
-                {jobStatus === 'Analysis' && (
+                {(jobStatus === 'Analysis' || jobStatus === 'Finished') && (
                     <div>
                         <PreviewPage />
                     </div>
