@@ -34,6 +34,22 @@ function parseSrt(srtContent) {
     return subtitles.filter((subtitle) => subtitle !== null);
 }
 
+function getRandomEmotion(emotionSet) {
+    const emotions = Array.from(emotionSet);
+    const randomIndex = Math.floor(Math.random() * emotions.length);
+    return emotions[randomIndex];
+}
+
+function assignEmotions(parsedSubtitles) {
+    const possibleEmotions = new Set(['Happy', 'Sad', 'Angry', 'Surprised', 'Neutral']);
+    const subtitlesWithEmotions = parsedSubtitles.map(obj => ({
+        ...obj,
+        audioEmotion: getRandomEmotion(possibleEmotions),
+        videoEmotion: getRandomEmotion(possibleEmotions),
+    }));
+    return subtitlesWithEmotions;
+}
+
 function toSeconds(time, skipMilliseconds = false) {
     // console.log('time is', time, ' and type', typeof time);
 
@@ -67,6 +83,7 @@ const AudioSection = (props) => {
 
     const [srt, setSrt] = useState(null);
     const [parsedSubtitles, setParsedSubtitles] = useState(null);
+    const [subtitlesWithEmotions, setSubtitlesWithEmotions] = useState(null);
 
     useEffect(() => {
         if(srt){
@@ -79,6 +96,17 @@ const AudioSection = (props) => {
             console.log(parsedSubtitles);
         }
     }, [srt]);
+
+    useEffect(() => {
+        if (parsedSubtitles) {
+            setSubtitlesWithEmotions(assignEmotions(parsedSubtitles));
+            // console.log(subtitlesWithEmotions);
+        }
+    }, [parsedSubtitles]);
+
+    useEffect(() => {
+        console.log(subtitlesWithEmotions);
+    }, [subtitlesWithEmotions]);
 
     useEffect(() => {
         const jobDetails = JSON.parse(localStorage.getItem("jobStruct"));
@@ -151,13 +179,13 @@ const AudioSection = (props) => {
         <>
             <Grid item container style={{ width: '100%', height: '100%' }} >
                 <Grid item container justifyContent='flex-end' style={{ width: '100%', height: '100%' }} >
-                    { parsedSubtitles ?
-                            <Grid item container direction='column' style={{ width: '100%', height: '100%', background: '#e9e9e9', }}  >
+                    { subtitlesWithEmotions ?
+                            <Grid item container direction='column' style={{ width: '100%', height: '120%', background: '#e9e9e9', }}  >
                                 <SimpleBar style={{ width: '100%', height: '100%' }} autoHide={false} >
                                     <TimeBar totalSeconds={totalSeconds} />
                                     <Grid item container direction='column' style={{ height: '50%' }} >
                                         <TTSTarget
-                                            subtitles={parsedSubtitles}
+                                            subtitles={subtitlesWithEmotions}
                                         />
                                     </Grid>
                                 </SimpleBar>
