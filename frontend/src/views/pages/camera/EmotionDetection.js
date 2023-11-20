@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import SRTViewer from './SRTViewer';
 import { parse } from "dotenv";
+import { func } from "prop-types";
 
 function parseSrt(srtContent) {
     // Split the SRT content into individual subtitle blocks
@@ -34,12 +35,29 @@ function parseSrt(srtContent) {
     return subtitles.filter((subtitle) => subtitle !== null);
 }
 
+function getRandomEmotion(emotionSet) {
+    const emotions = Array.from(emotionSet);
+    const randomIndex = Math.floor(Math.random() * emotions.length);
+    return emotions[randomIndex];
+}
+
+function assignEmotions(parsedSubtitles) {
+    const possibleEmotions = new Set(['Happy', 'Sad', 'Angry', 'Surprised', 'Neutral']);
+    const subtitlesWithEmotions = parsedSubtitles.map(obj => ({
+        ...obj,
+        audioEmotion: getRandomEmotion(possibleEmotions),
+        videoEmotion: getRandomEmotion(possibleEmotions),
+    }));
+    return subtitlesWithEmotions;
+}
+
 const EmotionDetection = (props) => {
     const [recordingSrc, setRecordingSrc] = useState(null);
     const [scriptSrc, setScriptSrc] = useState(null);
     const [job, setJob] = useState(null);
     const [srt, setSrt] = useState(null);
     const [parsedSubtitles, setParsedSubtitles] = useState(null);
+    const [subtitlesWithEmotions, setSubtitlesWithEmotions] = useState(null);
 
     useEffect(() => {
         if (srt) {
@@ -47,6 +65,21 @@ const EmotionDetection = (props) => {
             console.log(parsedSubtitles);
         }
     }, [srt]);
+
+    useEffect(() => {
+        if (parsedSubtitles) {
+            setSubtitlesWithEmotions(assignEmotions(parsedSubtitles));
+            console.log(subtitlesWithEmotions);
+        }
+    }, [parsedSubtitles]);
+
+    useEffect(() => {
+        if (subtitlesWithEmotions) {
+            localStorage.setItem("subStruct", JSON.stringify(subtitlesWithEmotions));
+            console.log("subtitle with emotions");
+            console.log(JSON.parse(localStorage.getItem("subStruct")));
+        }
+    }, [subtitlesWithEmotions]);
 
     useEffect(() => {
         const jobDetails = JSON.parse(localStorage.getItem("jobStruct"));
@@ -247,7 +280,7 @@ const EmotionDetection = (props) => {
             >
                 <span style={{ fontFamily: "Montserrat", color: "#6c6c6c", fontSize: "16px", fontWeight: 500 }}>SRT file</span>
                 <SRTViewer
-                    subtitles={parsedSubtitles}
+                    subtitles={subtitlesWithEmotions}
                 />
 
             </Grid>

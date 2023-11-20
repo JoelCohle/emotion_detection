@@ -38,81 +38,62 @@ const SRTViewer = (props) => {
             overflow: 'hidden',
           }}
         >
-        <div style={{ flex: 1, height: '100%', overflowY: 'scroll', padding: '20px' }}>
-            {!props.subtitles ? (
-              <div css={loaderStyles} style={{ paddingLeft: '42%' }}>
-                <CircularProgress style={{color: "rgb(14, 102, 172)"}} size={100} />
-              </div>
-            ) : (
-              // props.subtitles.map((subtitle, index) => (
-              props.subtitles.map((subtitle, index) => (
-                // <div onClick={() => changeSeekTime(index)}>
-                <div>
-                  <Grid
-                    //id={'subtitle'+index}
-                    item
-                    container
-                    direction='column'
-                    style={{
-                      width: '97.5%',
-                      height: 'auto', //'17.96vh',
-                      borderBottom: '2px solid white',
-                    }}
-                    // onClick={() => changeSeekTime(index)}
-                  >
-                    <Subtitles
-                      key={subtitle.id} // Assuming `id` is a unique identifier for each subtitle
-                      index={index}
-                      startTime={subtitle.start}
-                      endTime={subtitle.end}
-                      text={subtitle.text}
-                      subtitle={subtitle}
-                    />
+            <div style={{ flex: 1, height: '100%', overflowY: 'scroll', padding: '20px' }}>
+                {!props.subtitles ? (
+                    <div css={loaderStyles} style={{ paddingLeft: '42%' }}>
+                        <CircularProgress style={{color: "rgb(14, 102, 172)"}} size={100} />
+                    </div>
+                ) : (
+                    props.subtitles.map((subtitle, index) => (
+                        <div>
+                            <Grid
+                                //id={'subtitle'+index}
+                                item
+                                container
+                                direction='column'
+                                style={{
+                                    width: '97.5%',
+                                    height: 'auto', //'17.96vh',
+                                    borderBottom: '2px solid white',
+                                }}
+                            >
+                                <Subtitles
+                                    key={subtitle.id} // Assuming `id` is a unique identifier for each subtitle
+                                    index={index}
+                                    startTime={subtitle.start}
+                                    endTime={subtitle.end}
+                                    text={subtitle.text}
+                                    audioEmotion={subtitle.audioEmotion}
+                                    videoEmotion={subtitle.videoEmotion}
+                                    subtitle={subtitle}
+                                />
 
-                    <Grid
-                      item
-                      container
-                      style={{
-                        width: '100%',
-                        height: 16,
-                        // backgroundColor: 'pink',
-                        marginTop: '1.9vh',
-                      }}
-                    >
-                      <Grid
-                        item
-                        container
-                        justify='center'
-                        alignItems='center'
-                        // xs={10}
-                        style={{ width: '100%' }} //'92%'
-                      >
-                        <img src='images/CustomHR.png' style={{ width: '98%', height: '2px' }} />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  {/* {props.merge ? (
-                    // <Button style={{ padding: "2px 6px", background: "rgb(200,200,200)", marginRight: "5%",marginTop:"10%",marginBottom:"0%" }} onClick={() => { props.merge(props.index); }}>merge</Button>
-                    <input
-                      type='image'
-                      src='images/merge.png'
-                      onClick={() => {
-                        props.merge(index);
-                      }}
-                      style={{
-                        position: 'absolute',
-                        height: '1.3vw',
-                        width: '1.3vw',
-                        marginTop: '-1.5vw',
-                        marginLeft: '95%',
-                      }}
-                    />
-                  ) : null} */}
-                </div>
-              ))
-            )}
-        {/*</SimpleBar>*/}
-        </div>
+                                <Grid
+                                    item
+                                    container
+                                    style={{
+                                        width: '100%',
+                                        height: 16,
+                                        // backgroundColor: 'pink',
+                                        marginTop: '1.9vh',
+                                    }}
+                                >
+                                    <Grid
+                                        item
+                                        container
+                                        justify='center'
+                                        alignItems='center'
+                                        // xs={10}
+                                        style={{ width: '100%' }} //'92%'
+                                    >
+                                        <img src='images/CustomHR.png' style={{ width: '98%', height: '2px' }} />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    ))
+                )}
+            </div>
         </Grid>
     );
 };
