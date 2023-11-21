@@ -10,6 +10,7 @@ import WebcamCapture from './Camera'
 import EmotionDetection from './EmotionDetection';
 import PreviewPage from './Preview';
 import TestPage from './Test';
+import SRTEditorLoader from './SRTEditorLoader';
 
 const customStyles = {
     control: (provided, state) => ({
@@ -125,14 +126,15 @@ const RecordVideo = (props) => {
 
                 {jobStatus === 'Recorded' && !currJob.SRT && (
                     <div>
-                        <Grid item container justifyContent="center" style={{height: "100%", width:"100%"}}>
+                        <SRTEditorLoader />
+                        {/* <Grid item container justifyContent="center" style={{height: "100%", width:"100%"}}>
                         <CircularProgress
                             size='25vw'
                             style={{
                             color: "rgb(14, 102, 172)",
                             }}
                         />
-                        </Grid>
+                        </Grid> */}
                     </div>
                 )}    
 

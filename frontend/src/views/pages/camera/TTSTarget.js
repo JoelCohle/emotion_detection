@@ -67,11 +67,11 @@ const TTSTarget = (props) => {
                                         color: '#7d7d7d',
                                         WebkitBoxSizing: 'border-box',
                                         borderRadius: 4,
-                                        border: '2px solid #e9e9e9',
+                                        border: subtitles[i].audioEmotion === subtitles[i].videoEmotion ?  '2px solid #00ff00': '2px solid #ff0000',
                                         boxSizing: 'border-box',
                                         background: 'rgb(252, 252, 252)',
                                         boxShadow: (() => {
-                                            return 'rgb(100, 100, 100) 0px 0px 1px 1px inset'
+                                            return 'rgb(100, 100, 100) 0px 0px 1px 1px inset' 
                                         })()
                                     }}
                                 // onClick={() => props.selectChunk(i)}   

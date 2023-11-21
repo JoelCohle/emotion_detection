@@ -1,0 +1,8 @@
+1
+00:00:00,490 --> 00:00:03,914
+Hello. This is a test for our BTP
+
+2
+00:00:03,962 --> 00:00:08,010
+project. The audio should be clear and be transcripted into the SRT.
+

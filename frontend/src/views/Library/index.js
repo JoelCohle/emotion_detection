@@ -454,7 +454,7 @@ const Library = () => {
                                                                     {file.status != "Completed" ? (
                                                                         <button
                                                                             className={classes.statusButtons}
-                                                                            style={{ color: file.status === "Created" ? "#0e66ac" : file.status.includes("In Progress") || file.status === "Preview" ? "#ea6a22" : "#22c01f", textAlign: "center", border: "none", background: "none", }}
+                                                                            style={{ color: file.status === "Created" ? "#0e66ac" : file.status.includes("Recorded") || file.status === "Analysis" ? "#ea6a22" : "#22c01f", textAlign: "center", border: "none", background: "none", }}
                                                                             onClick={(e) => e.stopPropagation()}
                                                                         >
                                                                             {file.status}
